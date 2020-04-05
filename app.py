@@ -31,12 +31,13 @@ def respond():
        """
         # send the welcoming message
         bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-    elif text == "/end":
-        bot.sendMessage(chat_id=chat_id, text="Bye", reply_to_message_id=msg_id)
+    elif text == "bye":
+        bot.send_animation(chat_id=chat_id, animation="animations/bye.mp4", reply_to_message_id=msg_id)
     else:
         try:
             # clear the message we got from any non alphabets
             text = re.sub(r"\W", "_", text)
+            print(text)
             # create the api link for the avatar based on http://avatars.adorable.io/
             url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
             # reply with a photo to the name the user sent,
