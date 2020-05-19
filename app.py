@@ -35,7 +35,8 @@ def respond():
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
     elif text == "bye":
-        bot.send_animation(chat_id=chat_id, animation="animations/bye_bye.mp4", reply_to_message_id=msg_id)
+        animation = telegram.Animation("animations/bye_bye.mp4")
+        bot.send_animation(chat_id=chat_id, animation=animation, reply_to_message_id=msg_id)
     else:
         try:
             # clear the message we got from any non alphabets
@@ -67,6 +68,11 @@ def set_webhook():
 @app.route('/')
 def index():
     return '.'
+
+
+@app.route('/<str>')
+def other():
+    return 'wrong url'
 
 
 if __name__ == '__main__':
