@@ -35,7 +35,7 @@ def respond():
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
     elif text == "bye":
-        bot.send_animation(chat_id=chat_id, animation='bye_bye', reply_to_message_id=msg_id)
+        bot.send_animation(chat_id=chat_id, animation='{}bye_bye'.format(URL), reply_to_message_id=msg_id)
     else:
         try:
             # clear the message we got from any non alphabets
