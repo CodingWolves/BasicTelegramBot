@@ -67,7 +67,7 @@ def set_webhook():
 
 @app.route('/')
 def index():
-    return '.'
+    return '.1'
 
 
 @app.route('/<str>')
