@@ -15,6 +15,14 @@ class Conversation:
         self.user = user  # contains id , first_name , is_bot , last_name , language_code
         pass
 
+    def __getitem__(self, item):
+        if item == 'bot':
+            return self.bot
+        if item == 'chat_id':
+            return self.chat_id
+        if item == 'user':
+            return self.user
+
     def Act(self, bot, message):
         text = message.text.encode('utf-8').decode()
 
@@ -49,7 +57,7 @@ class Response:
     @staticmethod
     def text(bot, message, send_text):
         bot.sendMessage(chat_id=message.chat.id, text=send_text,
-                           reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
+                        reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
 
 
 fast_text_responses = {
