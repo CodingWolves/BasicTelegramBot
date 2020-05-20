@@ -33,11 +33,17 @@ class Conversation:
         for act in user_specific_acts:
             if text in act['triggers']:
                 response = act['response']
-                if "{KeyboardMarkup:" in response:
-                    string_values = getFormatValues(response, 'KeyboardMarkup')
+                if "{ReplyMarkup:" in response:
+                    string_values = getFormatValues(response, 'ReplyMarkup')
                     options = convertStringToSquaredList(string_values)
-                    markup = Response.makeKeyboardMarkup(options)
-                    response = removeFormatName(response, "KeyboardMarkup")
+                    markup = Response.makeReplyMarkup(options)
+                    response = removeFormatName(response, "ReplyMarkup")
+                    pass
+                if "{InlineMarkup:" in response:
+                    string_values = getFormatValues(response, 'InlineMarkup')
+                    options = convertStringToSquaredList(string_values)
+                    markup = Response.makeInlineMarkup(options)
+                    response = removeFormatName(response, "InlineMarkup")
                     pass
                 response = response.format(user=self.user, bot_user_name=bot_user_name)
                 return Response.SendText(bot, message, response, markup=markup)
@@ -62,8 +68,12 @@ class Response:
                                reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
-    def makeKeyboardMarkup(options):
+    def makeReplyMarkup(options):
         return ReplyKeyboardMarkup(options)
+
+    @staticmethod
+    def makeInlineMarkup(options):
+        return InlineKeyboardMarkup(options)
 
 
 fast_text_responses = [{
@@ -92,7 +102,10 @@ user_specific_acts = [{
     'response': "my name is {bot_user_name}"
 }, {
     'triggers': ['i got options', 'options', 'option', 'what?'],
-    'response': "my options{KeyboardMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+    'response': "my options{ReplyMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+}, {
+    'triggers': ['inline options'],
+    'response': "my options{InlineMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
 },
 ]
 
