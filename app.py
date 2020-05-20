@@ -2,6 +2,7 @@ import re
 from flask import Flask, request, send_file
 import telegram
 from telebot.credentials import bot_token, bot_user_name, URL
+from telegram.botcommand import BotCommand
 
 global bot
 global TOKEN
@@ -58,6 +59,8 @@ def respond():
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    commands = [BotCommand('/start', 'write something')]
+    bot.setMyCommands(commands=commands)
     if s:
         return "webhook setup ok"
     else:
