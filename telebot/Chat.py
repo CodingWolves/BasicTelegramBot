@@ -16,12 +16,7 @@ class Conversation:
         pass
 
     def __getitem__(self, item):
-        if item == 'bot':
-            return self.bot
-        if item == 'chat_id':
-            return self.chat_id
-        if item == 'user':
-            return self.user
+        return getattr(self, item)
 
     def MessageAct(self, bot, message):
         text = message.text.encode('utf-8').decode()
@@ -51,15 +46,18 @@ class Conversation:
 
 
 class Response:
-    remove_reply_markup = telegram.ReplyKeyboardRemove()
 
     @staticmethod
-    def SendAnimation(bot, message, url, markup=remove_reply_markup):
+    def SendAnimation(bot, message, url, markup=None):
+        if markup is None:
+            markup = telegram.ReplyKeyboardRemove()
         return bot.send_animation(chat_id=message.chat.id, animation=url,
                                   reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
-    def SendText(bot, message, send_text, markup=remove_reply_markup):
+    def SendText(bot, message, send_text, markup=None):
+        if markup is None:
+            markup = telegram.ReplyKeyboardRemove()
         return bot.sendMessage(chat_id=message.chat.id, text=send_text,
                                reply_to_message_id=message.message_id, reply_markup=markup)
 
@@ -82,7 +80,7 @@ fast_animation_responses = [{
 
 user_specific_acts = [{
     'triggers': ['whats my name?', 'what is my name?'],
-    'response': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye bye'}"
+    'response': "{user.first_name}"
 }, {
     'triggers': ['what is my full name?', 'whats my full name?'],
     'response': "{user.first_name} {user.last_name}"
@@ -93,7 +91,7 @@ user_specific_acts = [{
     'triggers': ['whats your name?', 'what is your name?', 'what is ur name?', 'whats ur name?'],
     'response': "my name is {bot_user_name}"
 }, {
-    'triggers': ['i got options'],
+    'triggers': ['i got options', 'options', 'option', 'what?'],
     'response': "my options{KeyboardMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
 },
 ]
@@ -110,6 +108,6 @@ def getFormatValues(text, format_name):
     return text[start_index:end_index]
 
 
-# format of this function is '1','2':'3','4' to [['1','2']['3','4']]
+# format of this function is "'1','2':'3','4'" to [['1','2']['3','4']]
 def convertStringToSquaredList(text):
     return [(eval("[" + row + "]")) for row in text.split(":")]
