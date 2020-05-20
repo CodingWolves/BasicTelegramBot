@@ -25,6 +25,7 @@ class Conversation:
 
     def Act(self, bot, message):
         text = message.text.encode('utf-8').decode()
+        markup = None
 
         if text in fast_text_responses:
             Response.SendText(bot, message, fast_text_responses[text])
@@ -38,9 +39,10 @@ class Conversation:
                 mark_text = text.split("{KeyboardMarkup:")[1]
                 mark_text = mark_text.split('}')[0]
                 options = [(eval("[" + row + "]")) for row in mark_text.split(":")]  # orders the options
+                markup = Response.makeKeyboardMarkup(options)
                 text = text[:text.rfind('{')]
                 pass
-            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options)
+            text = text.format(user=self.user, bot_user_name=bot_user_name, markup=markup)
             Response.SendText(bot, message, text)
 
         pass
@@ -60,7 +62,7 @@ class Response:
                         reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
-    def getKeyboardMarkup(options=[[]]):
+    def makeKeyboardMarkup(options):
         return ReplyKeyboardMarkup(options)
 
 
