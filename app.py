@@ -44,8 +44,9 @@ def respond():
                        [InlineKeyboardButton('no', callback_data='n')]]
             markups = InlineKeyboardMarkup(buttons)
             bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
-        except Exception:
+        except Exception as err:
             print('!!!!!!!!problem with buttons!!!!!!')
+            print('buttons error - %' % err)
     elif text == "hi":
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
