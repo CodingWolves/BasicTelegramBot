@@ -42,7 +42,7 @@ class Conversation:
                     string_values = getFormatValues(response, 'KeyboardMarkup')
                     options = convertStringToSquaredList(string_values)
                     markup = Response.makeKeyboardMarkup(options)
-                    response = removeFormatName("KeyboardMarkup")
+                    response = removeFormatName(response, "KeyboardMarkup")
                     pass
                 response = response.format(user=self.user, bot_user_name=bot_user_name)
                 return Response.SendText(bot, message, response, markup=markup)
