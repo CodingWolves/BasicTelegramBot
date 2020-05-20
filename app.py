@@ -59,7 +59,9 @@ def respond():
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
-    commands = [BotCommand('/start', 'starts the process')]
+    commands = [BotCommand('/start', 'starts the process'),
+                BotCommand('bye', 'send a gif of bye_bye'),
+                BotCommand('hi', 'says hi back')]
     bot.set_my_commands(commands=commands)
     if s:
         return "webhook setup ok"
