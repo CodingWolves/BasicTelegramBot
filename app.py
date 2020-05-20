@@ -16,18 +16,23 @@ bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
 
+# to see logs in REAL TIME login through Heroku CLI(CMD) and write the following line
+# heroku logs -a start-telegram-bot --tail
+
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
 
-    print('!!!!!!!!!!!!! message format - VVVVV')
-    print(update)
-    print('')
+    # print('!!!!!!!!!!!!! message format - VVVVV') # for checking what update returns
+    # print(update)
+    # print('')
 
-    if update.callback_query: # button menu pressed
+    if update.callback_query:  # button menu pressed
         data = update.callback_query.data
+        chat_id = update.callback_query.message.chat.id
+        msg_id = update.callback_query.message.message_id
         print('user pressed on button and returns %s' % str(data))
         return 'ok'
 
@@ -38,17 +43,20 @@ def respond():
     text = update.message.text.encode('utf-8').decode()
     # for debugging purposes only
     print("got text message :", text)
-    # the first time you chat with the bot AKA the welcoming message
+
     if text == "/start":
-        # print the welcoming message
         bot_welcome = """
-       Welcome to coolAvatar bot, the bot is using the service from http://avatars.adorable.io/ to generate cool looking avatars based on the name you enter so please enter a name and the bot will reply with an avatar for your name.
-       """
-        # send the welcoming message
+            Welcome to coolAvatar bot, 
+            the bot is using the service from http://avatars.adorable.io/ 
+            to generate cool looking avatars based on the name you enter 
+            so please enter a name and the bot will reply with an avatar for your name.
+        """
+        # shows 'typing...' for 2 seconds
         bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
         sleep(2)
+        bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
         try:
-            bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
+            # sends buttons on screen below the text sent, when pressed returns the callback_data value
             buttons = [[InlineKeyboardButton('yes', callback_data='y')],
                        [InlineKeyboardButton('no', callback_data='n')]]
             markups = InlineKeyboardMarkup(buttons)
@@ -60,6 +68,7 @@ def respond():
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
     elif text == "bye":
+        # animation needs to be a reachable video url
         bot.send_animation(chat_id=chat_id, animation='{}bye_bye'.format(URL), reply_to_message_id=msg_id)
     else:
         try:
@@ -82,15 +91,14 @@ def respond():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
-    s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
-    commands = [BotCommand('/start', 'starts the process'),  # only slashed commands
-                BotCommand('bye', 'send a gif of bye_bye'),
-                BotCommand('hi', 'says hi back')]
-    bot.set_my_commands(commands=commands)
-    if s:
-        return "webhook setup ok"
-    else:
-        return "webhook setup failed"
+    webhook_ok = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
+    # sends telegram a list of optional slashed commands
+    commands = [BotCommand('/start', 'starts the process')]
+    commands_ok = bot.set_my_commands(commands=commands)
+
+    return "webhook setup - %s , commands setup - %s" %\
+           'ok' if webhook_ok else 'failed',\
+           'ok' if commands_ok else 'failed'
 
 
 @app.route('/')
