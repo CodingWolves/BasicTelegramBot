@@ -30,15 +30,18 @@ def respond():
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
 
-    # print('!!!!!!!!!!!!! message format - VVVVV') # for checking what update returns
-    # print(update)
-    # print('')
+    print('!!!!!!!!!!!!! message format - VVVVV') # for checking what update returns
+    print(update)
+    print('')
 
     if update.callback_query:  # button menu pressed
         data = update.callback_query.data
         chat_id = update.callback_query.message.chat.id
         msg_id = update.callback_query.message.message_id
         print('user pressed on button and returns %s' % str(data))
+        return 'ok'
+
+    if update.edited_message:
         return 'ok'
 
     chat_id = update.message.chat.id
