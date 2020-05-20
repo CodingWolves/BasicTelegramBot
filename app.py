@@ -6,6 +6,7 @@ import telegram
 from telegram.botcommand import BotCommand
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 from telegram.chataction import ChatAction
 from telebot.credentials import bot_token, bot_user_name, URL
 
@@ -60,8 +61,8 @@ def respond():
             # sends buttons on screen below the text sent, when pressed returns the callback_data value
             buttons = [[InlineKeyboardButton('yes', callback_data='y')],
                        [InlineKeyboardButton('no', callback_data='n')]]
-            markups = InlineKeyboardMarkup(buttons)
-            bot.sendMessage(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
+            menu_markups = InlineKeyboardMarkup(buttons)
+            bot.sendMessage(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=menu_markups)
         except Exception as err:
             print('!!!!!!!!problem with buttons!!!!!!')
             print('buttons error - %s' % str(err))
@@ -71,6 +72,11 @@ def respond():
     elif text == "bye":
         # animation needs to be a reachable video url
         bot.send_animation(chat_id=chat_id, animation='{}bye_bye'.format(URL), reply_to_message_id=msg_id)
+    elif text == 'help':
+        options = [['hi', 'help'],
+                   ['bye', 'name']]
+        reply_markups = ReplyKeyboardMarkup(options)
+        bot.sendMessage(chat_id=chat_id, text='those are your options', reply_markup=reply_markups)
     else:
         try:
             # clear the message we got from any non alphabets
