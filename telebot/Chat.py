@@ -1,11 +1,12 @@
 import telegram
-from telegram.botcommand import BotCommand
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 from telegram.chataction import ChatAction
 
-from telebot.credentials import bot_token, bot_user_name, URL
+from telebot.credentials import bot_user_name, URL
+
+from time import sleep
 
 
 class Conversation:
@@ -49,6 +50,9 @@ class Conversation:
                 response = response.format(user=self.user, bot_user_name=bot_user_name)
                 return Response.SendText(bot, message, response, markup=markup)
 
+        url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
+        Response.SendPhoto(bot, message, url)
+
         pass  # Act
 
 
@@ -62,11 +66,19 @@ class Response:
                                   reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
+    def SendPhoto(bot, message, url):
+        bot.sendPhoto(chat_id=message.chat.id, photo=url, reply_to_message_id=message.message_id)
+
+    @staticmethod
     def SendText(bot, message, send_text, markup=None):
         if markup is None:
             markup = telegram.ReplyKeyboardRemove()
         return bot.sendMessage(chat_id=message.chat.id, text=send_text,
                                reply_to_message_id=message.message_id, reply_markup=markup)
+
+    @staticmethod
+    def SendTyping(bot, message):
+        bot.sendChatAction(chat_id=message.chat.id, action=ChatAction.TYPING)
 
     @staticmethod
     def makeReplyMarkup(options):
@@ -80,6 +92,17 @@ class Response:
 fast_text_responses = [{
     'triggers': ['hi', 'hello', 'hi2'],
     'response': 'hello to you too :)'
+}, {
+    'triggers': ['/start'],
+    'response':  """
+            Welcome to coolAvatar bot, 
+            the bot is using the service from http://avatars.adorable.io/ 
+            to generate cool looking avatars based on the name you enter 
+            so please enter a name and the bot will reply with an avatar for your name.
+        """
+}, {
+    'triggers': ['ok', 'okay', 'ko'],
+    'response':  'OK'
 },
 ]
 
@@ -102,8 +125,9 @@ user_specific_acts = [{
     'triggers': ['whats your name?', 'what is your name?', 'what is ur name?', 'whats ur name?'],
     'response': "my name is {bot_user_name}"
 }, {
-    'triggers': ['i got options', 'options', 'option', 'what?'],
-    'response': "my options{ReplyMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+    'triggers': ['i got options', 'options', 'option', 'what?', 'help', '/help'],
+    'response': "options{ReplyMarkup:'hi','hello':'bye bye','whats your name?':"
+                "'whats my full name?','ok':'inline options','/start'}"
 }, {
     'triggers': ['inline options'],
     'response': "my options{InlineMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
