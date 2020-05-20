@@ -94,7 +94,7 @@ user_specific_acts = [{
     'response': "my name is {bot_user_name}"
 }, {
     'triggers': ['i got options'],
-    'response': "{KeyboardMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+    'response': "my options{KeyboardMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
 },
 ]
 
