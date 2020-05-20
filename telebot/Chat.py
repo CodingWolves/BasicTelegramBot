@@ -44,14 +44,14 @@ class Response:
     remove_reply_markup = telegram.ReplyKeyboardRemove()
 
     @staticmethod
-    def animation(bot, message, url):
+    def animation(bot, message, url, markup=remove_reply_markup):
         bot.send_animation(chat_id=message.chat.id, animation=url,
-                           reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
+                           reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
-    def text(bot, message, send_text):
+    def text(bot, message, send_text, markup=remove_reply_markup):
         bot.sendMessage(chat_id=message.chat.id, text=send_text,
-                        reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
+                        reply_to_message_id=message.message_id, reply_markup=markup)
 
 
 fast_text_responses = {
@@ -59,7 +59,7 @@ fast_text_responses = {
 }
 
 fast_animation_responses = {
-    'bye2': '{}bye_bye'.format(URL),
+    'bye bye': '{}bye_bye'.format(URL),
 }
 
 user_specific_text_responses = {

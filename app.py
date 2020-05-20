@@ -44,6 +44,9 @@ def respond():
     if update.edited_message:
         return 'ok'
 
+    if update.message and update.message.document:
+        return 'ok'
+
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
 
