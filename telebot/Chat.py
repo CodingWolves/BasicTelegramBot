@@ -9,7 +9,7 @@ from telebot.credentials import bot_token, bot_user_name, URL
 
 
 class Conversation:
-    def __init__(self, bot, chat_id, user=[]):
+    def __init__(self, bot=telegram.Bot, chat_id=[], user=[]):
         self.bot = bot
         self.chat_id = chat_id
         self.user = user  # contains id , first_name , is_bot , last_name , language_code
@@ -48,7 +48,7 @@ class Response:
 
     @staticmethod
     def text(bot, message, send_text):
-        bot.send_animation(chat_id=message.chat.id, text=send_text,
+        bot.sendMessage(chat_id=message.chat.id, text=send_text,
                            reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
 
 
