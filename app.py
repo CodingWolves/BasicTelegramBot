@@ -16,6 +16,7 @@ bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
 
+
 # to see logs in REAL TIME login through Heroku CLI(CMD) and write the following line
 # heroku logs -a start-telegram-bot --tail
 
@@ -96,9 +97,10 @@ def set_webhook():
     commands = [BotCommand('/start', 'starts the process')]
     commands_ok = bot.set_my_commands(commands=commands)
 
-    return "webhook setup - %s , commands setup - %s" %\
-           'ok' if webhook_ok else 'failed',\
-           'ok' if commands_ok else 'failed'
+    return "webhook setup - {webhook} , commands setup - {commands}".format(
+        webhook='ok' if webhook_ok else 'failed',
+        commands='ok' if commands_ok else 'failed'
+    )
 
 
 @app.route('/')
