@@ -34,21 +34,10 @@ class Conversation:
 
         if text in user_specific_text_responses:
             text = user_specific_text_responses[text]
-            text = text.format(user=self.user)
-
-
-            # segments = user_specific_text_responses[text].split('.')
-            # pulled_text = segmentPull(self, segments)
+            text = text.format(user=self.user, bot_user_name=bot_user_name)
             Response.text(bot, message, text)
 
         pass
-
-
-def segmentPull(cls, segments):
-    if len(segments) == 1:
-        return cls[segments[0]]
-    elif len(segments) > 1:
-        return segmentPull(cls[segments[0]], segments[1:])
 
 
 class Response:
@@ -75,4 +64,8 @@ fast_animation_responses = {
 
 user_specific_text_responses = {
     'whats my name?': '{user.first_name}',
+    'what is my name?': '{user.first_name}',
+    'whats my family name?': '{user.last_name}',
+    'whats my full name?': '{user.first_name} {user.last_name}',
+    'whats your name?': 'my name is {bot_user_name}'
 }
