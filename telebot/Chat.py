@@ -38,8 +38,9 @@ class Conversation:
                 mark_text = text.split("{KeyboardMarkup:")[1]
                 mark_text = mark_text.split('}')[0]
                 options = [(eval("[" + row + "]")) for row in mark_text.split(":")]  # orders the options
+                text = text[:text.rfind('{')]
                 pass
-            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options, KeyboardMarkup=None)
+            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options)
             Response.SendText(bot, message, text)
 
         pass
