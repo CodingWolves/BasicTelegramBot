@@ -44,12 +44,12 @@ class Response:
     @staticmethod
     def animation(bot, message, url):
         bot.send_animation(chat_id=message.chat.id, animation=url,
-                           reply_to_message_id=message.id, reply_markup=Response.remove_reply_markup)
+                           reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
 
     @staticmethod
     def text(bot, message, send_text):
         bot.send_animation(chat_id=message.chat.id, text=send_text,
-                           reply_to_message_id=message.id, reply_markup=Response.remove_reply_markup)
+                           reply_to_message_id=message.message_id, reply_markup=Response.remove_reply_markup)
 
 
 fast_text_responses = {
