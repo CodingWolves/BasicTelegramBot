@@ -2,13 +2,16 @@ import re
 from time import sleep
 
 from flask import Flask, request, send_file
+
 import telegram
 from telegram.botcommand import BotCommand
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 from telegram.chataction import ChatAction
+
 from telebot.credentials import bot_token, bot_user_name, URL
+from telebot.Chat import *
 
 global bot
 global TOKEN
@@ -81,6 +84,8 @@ def respond():
         remove_reply_markup = telegram.ReplyKeyboardRemove()
         bot.sendMessage(chat_id=chat_id, text='Ok', reply_markup=remove_reply_markup)
     else:
+        con = Conversation(bot, chat_id, user=update.message.chat)
+        con.Act(bot, message=update.message)
         try:
             # clear the message we got from any non alphabets
             text = re.sub(r"\W", "_", text)
