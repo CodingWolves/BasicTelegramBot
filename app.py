@@ -72,11 +72,14 @@ def respond():
     elif text == "bye":
         # animation needs to be a reachable video url
         bot.send_animation(chat_id=chat_id, animation='{}bye_bye'.format(URL), reply_to_message_id=msg_id)
-    elif text == 'help':
+    elif text == 'help' or text =='/help':
         options = [['hi', 'help'],
                    ['bye', 'name']]
         reply_markups = ReplyKeyboardMarkup(options)
         bot.sendMessage(chat_id=chat_id, text='those are your options', reply_markup=reply_markups)
+    elif text == 'ok':
+        remove_reply_markup = telegram.ReplyKeyboardRemove()
+        bot.sendMessage(chat_id=chat_id, text='Ok', reply_markup=remove_reply_markup)
     else:
         try:
             # clear the message we got from any non alphabets
@@ -100,7 +103,8 @@ def respond():
 def set_webhook():
     webhook_ok = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
     # sends telegram a list of optional slashed commands
-    commands = [BotCommand('/start', 'starts the process')]
+    commands = [BotCommand('/start', 'starts the process'),
+                BotCommand('/help', 'shows the possible actions')]
     commands_ok = bot.set_my_commands(commands=commands)
 
     return "webhook setup - {webhook} , commands setup - {commands}".format(
