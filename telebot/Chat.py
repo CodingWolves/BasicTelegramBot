@@ -23,11 +23,11 @@ class Conversation:
         if item == 'user':
             return self.user
 
-    def Act(self, bot, message):
+    def MessageAct(self, bot, message):
         text = message.text.encode('utf-8').decode()
         markup = None
 
-        if text in fast_text_responses:
+        if (text in responses.triggers for responses in fast_text_responses):
             Response.SendText(bot, message, fast_text_responses[text])
 
         if text in fast_animation_responses:
@@ -66,16 +66,17 @@ class Response:
         return ReplyKeyboardMarkup(options)
 
 
-fast_text_responses = {
-    'hi2': 'hello to you too :)',
-}
+fast_text_responses = [{
+    'triggers': ['hi', 'hello', 'hi2'],
+    'response': 'hello to you too :)'
+}]
 
 fast_animation_responses = {
     'bye bye': '{}bye_bye'.format(URL),
 }
 
 user_specific_text_responses = {
-    'whats my name?': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye'}",
+    'whats my name?': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye bye'}",
     'what is my name?': '{user.first_name}',
     'whats my family name?': '{user.last_name}',
     'whats my full name?': '{user.first_name} {user.last_name}',

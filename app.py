@@ -58,6 +58,9 @@ def respond():
     if text == 'showBodyOnServer()':
         print(str(request.data))
 
+    con = Conversation(bot, chat_id, user=update.message.chat)
+    con.MessageAct(bot, message=update.message)
+
     if text == "/start":
         bot_welcome = """
             Welcome to coolAvatar bot, 
@@ -93,8 +96,7 @@ def respond():
         remove_reply_markup = telegram.ReplyKeyboardRemove()
         bot.sendMessage(chat_id=chat_id, text='Ok', reply_markup=remove_reply_markup)
     else:
-        con = Conversation(bot, chat_id, user=update.message.chat)
-        con.Act(bot, message=update.message)
+
         try:
             # clear the message we got from any non alphabets
             text = re.sub(r"\W", "_", text)
