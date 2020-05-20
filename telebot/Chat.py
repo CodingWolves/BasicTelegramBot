@@ -28,8 +28,8 @@ class Conversation:
         markup = None
 
         for response in fast_text_responses:
-            if text in response.triggers:
-                return Response.SendText(bot, message, response.response)
+            if text in response['triggers']:
+                return Response.SendText(bot, message, response['response'])
 
         if text in fast_animation_responses:
             return Response.SendAnimation(bot, message, fast_animation_responses[text])
