@@ -40,9 +40,10 @@ def respond():
         sleep(2)
         try:
             bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-            buttons = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data='Y')],
-                                            [InlineKeyboardButton('No', callback_data='N')]])
-            bot.edit_message_text(chat_id=chat_id, reply_markup=buttons, text='starting menu')
+            buttons = [[InlineKeyboardButton('yes', callback_data='y')],
+                       [InlineKeyboardButton('no', callback_data='n')]]
+            markups = InlineKeyboardMarkup(buttons)
+            bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
         except Exception:
             print('!!!!!!!!problem with buttons!!!!!!')
     elif text == "hi":
