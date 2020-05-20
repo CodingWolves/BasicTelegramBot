@@ -73,7 +73,7 @@ def respond():
         # animation needs to be a reachable video url
         bot.send_animation(chat_id=chat_id, animation='{}bye_bye'.format(URL), reply_to_message_id=msg_id)
     elif text == 'help' or text =='/help':
-        options = [['hi', 'help'],
+        options = [['hi', 'ok'],
                    ['bye', 'name']]
         reply_markups = ReplyKeyboardMarkup(options)
         bot.sendMessage(chat_id=chat_id, text='those are your options', reply_markup=reply_markups)
