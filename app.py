@@ -26,6 +26,11 @@ def respond():
     print(update)
     print('')
 
+    if update.callback_query: # button menu pressed
+        data = update.callback_query.data
+        print('user pressed on button and returns %s' % str(data))
+        return 'ok'
+
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
 
