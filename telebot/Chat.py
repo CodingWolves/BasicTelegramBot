@@ -42,7 +42,7 @@ class Conversation:
                 if "{InlineMarkup:" in response:
                     string_values = getFormatValues(response, 'InlineMarkup')
                     options = convertStringToSquaredList(string_values)
-                    options = [[InlineKeyboardButton(item, item) for item in row] for row in options]
+                    options = [[InlineKeyboardButton(item, callback_data=item) for item in row] for row in options]
                     markup = Response.makeInlineMarkup(options)
                     response = removeFormatName(response, "InlineMarkup")
                     pass
