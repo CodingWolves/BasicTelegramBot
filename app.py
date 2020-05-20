@@ -93,7 +93,7 @@ def respond():
         remove_reply_markup = telegram.ReplyKeyboardRemove()
         bot.sendMessage(chat_id=chat_id, text='Ok', reply_markup=remove_reply_markup)
     else:
-        con = Conversation(bot, chat_id, user=update.message.chat)
+        con = Conversation(bot, chat_id, user=update.message['from'])
         con.Act(bot, message=update.message)
         try:
             # clear the message we got from any non alphabets

@@ -39,7 +39,7 @@ class Conversation:
                 mark_text = mark_text.split('}')[0]
                 options = [(eval("[" + row + "]")) for row in mark_text.split(":")]  # orders the options
                 pass
-            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options)
+            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options, KeyboardMarkup=None)
             Response.SendText(bot, message, text)
 
         pass
