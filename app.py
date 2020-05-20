@@ -46,7 +46,7 @@ def respond():
             bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
         except Exception as err:
             print('!!!!!!!!problem with buttons!!!!!!')
-            print('buttons error - %' % str(err))
+            print('buttons error - %s' % str(err))
     elif text == "hi":
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
