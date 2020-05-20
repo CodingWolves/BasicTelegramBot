@@ -10,7 +10,6 @@ flask = "*"
 gunicorn = "*"
 python-telegram-bot = "*"
 telebot = "*"
-telegram = "*"
 
 [requires]
 
