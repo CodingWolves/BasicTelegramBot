@@ -5,6 +5,7 @@ from flask import Flask, request, send_file
 import telegram
 from telegram.botcommand import BotCommand
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
+from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 from telegram.chataction import ChatAction
 from telebot.credentials import bot_token, bot_user_name, URL
 
@@ -38,8 +39,8 @@ def respond():
         bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
         sleep(2)
         bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-        buttons = [InlineKeyboardButton('Yes', callback_data='Y'),
-                   InlineKeyboardButton('No', callback_data='N')]
+        buttons = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data='Y')],
+                                        [InlineKeyboardButton('No', callback_data='N')]])
         bot.edit_message_text(chat_id=chat_id, reply_markup=buttons)
     elif text == "hi":
         respond_text = "hello to you too :)"
