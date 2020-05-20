@@ -27,11 +27,12 @@ class Conversation:
         text = message.text.encode('utf-8').decode()
         markup = None
 
-        if (text in responses.triggers for responses in fast_text_responses):
-            Response.SendText(bot, message, fast_text_responses[text])
+        for response in fast_text_responses:
+            if text in response.triggers:
+                return Response.SendText(bot, message, response.response)
 
         if text in fast_animation_responses:
-            Response.SendAnimation(bot, message, fast_animation_responses[text])
+            return Response.SendAnimation(bot, message, fast_animation_responses[text])
 
         if text in user_specific_text_responses:
             text = user_specific_text_responses[text]
@@ -43,7 +44,7 @@ class Conversation:
                 text = text[:text.rfind('{')]
                 pass
             text = text.format(user=self.user, bot_user_name=bot_user_name)
-            Response.SendText(bot, message, text, markup=markup)
+            return Response.SendText(bot, message, text, markup=markup)
 
         pass
 
@@ -53,13 +54,13 @@ class Response:
 
     @staticmethod
     def SendAnimation(bot, message, url, markup=remove_reply_markup):
-        bot.send_animation(chat_id=message.chat.id, animation=url,
-                           reply_to_message_id=message.message_id, reply_markup=markup)
+        return bot.send_animation(chat_id=message.chat.id, animation=url,
+                                  reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
     def SendText(bot, message, send_text, markup=remove_reply_markup):
-        bot.sendMessage(chat_id=message.chat.id, text=send_text,
-                        reply_to_message_id=message.message_id, reply_markup=markup)
+        return bot.sendMessage(chat_id=message.chat.id, text=send_text,
+                               reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
     def makeKeyboardMarkup(options):
