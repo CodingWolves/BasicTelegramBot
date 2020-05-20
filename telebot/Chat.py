@@ -27,26 +27,27 @@ class Conversation:
         text = message.text.encode('utf-8').decode()
         markup = None
 
-        for response in fast_text_responses:
-            if text in response['triggers']:
-                return Response.SendText(bot, message, response['response'])
+        for act in fast_text_responses:
+            if text in act['triggers']:
+                return Response.SendText(bot, message, act['response'])
 
-        if text in fast_animation_responses:
-            return Response.SendAnimation(bot, message, fast_animation_responses[text])
+        for act in fast_animation_responses:
+            if text in act['triggers']:
+                return Response.SendAnimation(bot, message, act['response'])
 
-        if text in user_specific_text_responses:
-            text = user_specific_text_responses[text]
-            if "{KeyboardMarkup:" in text:
-                mark_text = text.split("{KeyboardMarkup:")[1]
-                mark_text = mark_text.split('}')[0]
-                options = [(eval("[" + row + "]")) for row in mark_text.split(":")]  # orders the options
-                markup = Response.makeKeyboardMarkup(options)
-                text = text[:text.rfind('{')]
-                pass
-            text = text.format(user=self.user, bot_user_name=bot_user_name)
-            return Response.SendText(bot, message, text, markup=markup)
+        for act in user_specific_acts:
+            if text in act['triggers']:
+                response = act['response']
+                if "{KeyboardMarkup:" in response:
+                    string_values = getFormatValues(response, 'KeyboardMarkup')
+                    options = convertStringToSquaredList(string_values)
+                    markup = Response.makeKeyboardMarkup(options)
+                    response = removeFormatName("KeyboardMarkup")
+                    pass
+                response = response.format(user=self.user, bot_user_name=bot_user_name)
+                return Response.SendText(bot, message, response, markup=markup)
 
-        pass
+        pass  # Act
 
 
 class Response:
@@ -70,16 +71,45 @@ class Response:
 fast_text_responses = [{
     'triggers': ['hi', 'hello', 'hi2'],
     'response': 'hello to you too :)'
-}]
+},
+]
 
-fast_animation_responses = {
-    'bye bye': '{}bye_bye'.format(URL),
-}
+fast_animation_responses = [{
+    'triggers': ['bye bye', 'bye', 'goodbye'],
+    'response': '{}bye_bye'.format(URL),
+},
+]
 
-user_specific_text_responses = {
-    'whats my name?': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye bye'}",
-    'what is my name?': '{user.first_name}',
-    'whats my family name?': '{user.last_name}',
-    'whats my full name?': '{user.first_name} {user.last_name}',
-    'whats your name?': 'my name is {bot_user_name}'
-}
+user_specific_acts = [{
+    'triggers': ['whats my name?', 'what is my name?'],
+    'response': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye bye'}"
+}, {
+    'triggers': ['what is my full name?', 'whats my full name?'],
+    'response': "{user.first_name} {user.last_name}"
+}, {
+    'triggers': ['what is my family name?', 'whats my family name?'],
+    'response': "{user.last_name}"
+}, {
+    'triggers': ['whats your name?', 'what is your name?', 'what is ur name?', 'whats ur name?'],
+    'response': "my name is {bot_user_name}"
+}, {
+    'triggers': ['i got options'],
+    'response': "{KeyboardMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+},
+]
+
+
+def removeFormatName(text, format_name):
+    remove_from_index = text.find('{' + format_name + ':')
+    return text[:remove_from_index] + text[text.find('}', remove_from_index) + 1:]
+
+
+def getFormatValues(text, format_name):
+    start_index = text.find(':', text.find('{' + format_name + ':'))
+    end_index = text.find('}', start_index)
+    return text[start_index:end_index]
+
+
+# format of this function is '1','2':'3','4' to [['1','2']['3','4']]
+def convertStringToSquaredList(text):
+    return [(eval("[" + row + "]")) for row in text.split(":")]
