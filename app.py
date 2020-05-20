@@ -55,6 +55,9 @@ def respond():
     # for debugging purposes only
     print("got text message :", text)
 
+    if text == 'showBodyOnServer()':
+        print(str(request.data))
+
     if text == "/start":
         bot_welcome = """
             Welcome to coolAvatar bot, 
