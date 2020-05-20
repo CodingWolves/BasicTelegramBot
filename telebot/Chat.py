@@ -42,8 +42,8 @@ class Conversation:
                 markup = Response.makeKeyboardMarkup(options)
                 text = text[:text.rfind('{')]
                 pass
-            text = text.format(user=self.user, bot_user_name=bot_user_name, markup=markup)
-            Response.SendText(bot, message, text)
+            text = text.format(user=self.user, bot_user_name=bot_user_name)
+            Response.SendText(bot, message, text, markup=markup)
 
         pass
 
