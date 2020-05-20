@@ -27,15 +27,20 @@ class Conversation:
         text = message.text.encode('utf-8').decode()
 
         if text in fast_text_responses:
-            Response.text(bot, message, fast_text_responses[text])
+            Response.SendText(bot, message, fast_text_responses[text])
 
         if text in fast_animation_responses:
-            Response.animation(bot, message, fast_animation_responses[text])
+            Response.SendAnimation(bot, message, fast_animation_responses[text])
 
         if text in user_specific_text_responses:
             text = user_specific_text_responses[text]
-            text = text.format(user=self.user, bot_user_name=bot_user_name)
-            Response.text(bot, message, text)
+            if "{KeyboardMarkup:" in text:
+                mark_text = text.split("{KeyboardMarkup:")[1]
+                mark_text = mark_text.split('}')[0]
+                options = [(eval("[" + row + "]")) for row in mark_text.split(":")]  # orders the options
+                pass
+            text = text.format(user=self.user, bot_user_name=bot_user_name, options=options)
+            Response.SendText(bot, message, text)
 
         pass
 
@@ -44,14 +49,18 @@ class Response:
     remove_reply_markup = telegram.ReplyKeyboardRemove()
 
     @staticmethod
-    def animation(bot, message, url, markup=remove_reply_markup):
+    def SendAnimation(bot, message, url, markup=remove_reply_markup):
         bot.send_animation(chat_id=message.chat.id, animation=url,
                            reply_to_message_id=message.message_id, reply_markup=markup)
 
     @staticmethod
-    def text(bot, message, send_text, markup=remove_reply_markup):
+    def SendText(bot, message, send_text, markup=remove_reply_markup):
         bot.sendMessage(chat_id=message.chat.id, text=send_text,
                         reply_to_message_id=message.message_id, reply_markup=markup)
+
+    @staticmethod
+    def getKeyboardMarkup(options=[[]]):
+        return ReplyKeyboardMarkup(options)
 
 
 fast_text_responses = {
@@ -63,7 +72,7 @@ fast_animation_responses = {
 }
 
 user_specific_text_responses = {
-    'whats my name?': '{user.first_name}',
+    'whats my name?': "{user.first_name}{KeyboardMarkup:'hi2','bye':'bye'}",
     'what is my name?': '{user.first_name}',
     'whats my family name?': '{user.last_name}',
     'whats my full name?': '{user.first_name} {user.last_name}',
