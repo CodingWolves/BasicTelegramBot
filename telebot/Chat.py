@@ -33,8 +33,13 @@ class Conversation:
             Response.animation(bot, message, fast_animation_responses[text])
 
         if text in user_specific_text_responses:
-            segments = user_specific_text_responses[text].split('.')
-            Response.text(bot, message, segmentPull(self, segments))
+            text = user_specific_text_responses[text]
+            text = text.format(user=self.user)
+
+
+            # segments = user_specific_text_responses[text].split('.')
+            # pulled_text = segmentPull(self, segments)
+            Response.text(bot, message, text)
 
         pass
 
@@ -61,7 +66,7 @@ class Response:
 
 
 fast_text_responses = {
-    'hi2': "hello to you too :)",
+    'hi2': 'hello to you too :)',
 }
 
 fast_animation_responses = {
@@ -69,5 +74,5 @@ fast_animation_responses = {
 }
 
 user_specific_text_responses = {
-    'whats my name?': 'user.first_name',
+    'whats my name?': '{user.first_name}',
 }
