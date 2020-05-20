@@ -1,7 +1,10 @@
 import re
+from time import sleep
+
 from flask import Flask, request, send_file
 import telegram
 from telegram.botcommand import BotCommand
+from telegram.chataction import ChatAction
 from telebot.credentials import bot_token, bot_user_name, URL
 
 global bot
@@ -31,6 +34,8 @@ def respond():
        Welcome to coolAvatar bot, the bot is using the service from http://avatars.adorable.io/ to generate cool looking avatars based on the name you enter so please enter a name and the bot will reply with an avatar for your name.
        """
         # send the welcoming message
+        bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
+        sleep(2)
         bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
     elif text == "hi":
         respond_text = "hello to you too :)"
@@ -59,7 +64,7 @@ def respond():
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
     s = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
-    commands = [BotCommand('/start', 'starts the process'),
+    commands = [BotCommand('/start', 'starts the process'),  # only slashed commands
                 BotCommand('bye', 'send a gif of bye_bye'),
                 BotCommand('hi', 'says hi back')]
     bot.set_my_commands(commands=commands)
