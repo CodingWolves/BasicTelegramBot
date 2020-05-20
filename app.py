@@ -38,10 +38,13 @@ def respond():
         # send the welcoming message
         bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
         sleep(2)
-        bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
-        buttons = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data='Y')],
-                                        [InlineKeyboardButton('No', callback_data='N')]])
-        bot.edit_message_text(chat_id=chat_id, reply_markup=buttons)
+        try:
+            bot.sendMessage(chat_id=chat_id, text=bot_welcome, reply_to_message_id=msg_id)
+            buttons = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data='Y')],
+                                            [InlineKeyboardButton('No', callback_data='N')]])
+            bot.edit_message_text(chat_id=chat_id, reply_markup=buttons, text='starting menu')
+        except Exception:
+            print('!!!!!!!!problem with buttons!!!!!!')
     elif text == "hi":
         respond_text = "hello to you too :)"
         bot.sendMessage(chat_id=chat_id, text=respond_text, reply_to_message_id=msg_id)
