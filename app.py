@@ -43,7 +43,7 @@ def respond():
             buttons = [[InlineKeyboardButton('yes', callback_data='y')],
                        [InlineKeyboardButton('no', callback_data='n')]]
             markups = InlineKeyboardMarkup(buttons)
-            bot.edit_message_text(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
+            bot.sendMessage(chat_id=chat_id, message_id=msg_id, text='starting menu', reply_markup=markups)
         except Exception as err:
             print('!!!!!!!!problem with buttons!!!!!!')
             print('buttons error - %s' % str(err))
