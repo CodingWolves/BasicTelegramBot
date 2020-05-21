@@ -27,7 +27,7 @@ class Chat:
                 break
         else:
             self.unhandled_messages.append(message)
-            print("this message is unhandled {} saved to unhandled in chat id {}".format(message, *self.id))
+            print("this message is unhandled {} saved to unhandled in chat id {}".format(message, self.id))
 
 
 class Conversation:
