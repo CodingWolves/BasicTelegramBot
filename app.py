@@ -53,8 +53,8 @@ def respond():
     if text == 'showBodyOnServer()':
         print(str(request.data))
 
-    con = Conversation(update.message.chat.id, user=update.message.chat)
-    con.MessageAct(bot, message=update.message)
+    # con = Conversation(update.message.chat.id, user=update.message.chat)
+    # con.MessageAct(bot, message=update.message)
 
     # creates a new chat in list chats if never before
     current_chat = False
