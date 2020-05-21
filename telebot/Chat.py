@@ -28,14 +28,12 @@ class Chat:
         print("after follow_up_act")
 
         act = Act.getActByTrigger(text)
-        print("found act - act_id={act_id} , isAct? - {isAct}".format(act_id=act.id, isAct=act is Act))
-        if act is Act:
+        if issubclass(type(act), Act):
             follow_up_act = act.doAct(bot, self, message)
             if follow_up_act:
                 self.follow_up_act = follow_up_act
 
         print("end GotMessage")
-
 
 
 user_specific_acts = [{
