@@ -53,6 +53,7 @@ def respond():
     con = Conversation(bot, update.message.chat.id, user=update.message.chat)
     con.MessageAct(bot, message=update.message)
 
+    print("update message is = {}".format(update.message))
     Chat(update.message)
 
     return 'ok'
