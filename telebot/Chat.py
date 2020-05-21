@@ -5,20 +5,33 @@ from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 from telegram.chataction import ChatAction
 
 from telebot.credentials import bot_user_name, URL
+from telebot.Act import Act
+from telebot.ActDict import ActionsDictionary
 
 from time import sleep
 
 
 class Chat:
+    print("<<<<<<<<<<!!!Acts Created!!!>>>>>>>>>>")
+    Acts = [Act.CreateAct(act_dict) for act_dict in ActionsDictionary]
+
     def __init__(self, message):
-        self.chat_id = message.chat.id
-        self.user_id = getattr(message, 'from').id
-        print("user_id = {}".format(self.user_id))
+        self.id = message.chat.id
+        self.unhandled_messages = []
+
+    def GotMessage(self, bot, message):
+        text = message.text.encode('utf-8').decode()
+        for act in Chat.Acts:
+            if text in act.triggers:
+                act.doAct(bot, self, message)
+                break
+        else:
+            self.unhandled_messages.append(message)
+            print("this message is unhandled {} saved to unhandled in chat id {}".format(message, *self.id))
 
 
 class Conversation:
-    def __init__(self, bot, chat_id=[], user=[]):
-        self.bot = bot
+    def __init__(self, chat_id=[], user=[]):
         self.chat_id = chat_id
         self.user = user  # contains id , first_name , is_bot , last_name , language_code
         pass

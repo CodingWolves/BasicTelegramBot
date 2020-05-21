@@ -11,8 +11,10 @@ from telebot.Chat import *
 
 global bot
 global TOKEN
+global chats
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
+chats = []
 
 app = Flask(__name__)
 
@@ -26,9 +28,9 @@ def respond():
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
 
-    print('!!!!!!!!!!!!! message format - VVVVV') # for checking what update returns
-    print(update)
-    print('')
+    # print('!!!!!!!!!!!!! message format - !!!!!!!!!!!!!!') # for checking what update returns
+    # print(update)
+    # print('')
 
     if update.callback_query:  # button menu pressed
         data = update.callback_query.data
@@ -51,11 +53,20 @@ def respond():
     if text == 'showBodyOnServer()':
         print(str(request.data))
 
-    con = Conversation(bot, update.message.chat.id, user=update.message.chat)
+    con = Conversation(update.message.chat.id, user=update.message.chat)
     con.MessageAct(bot, message=update.message)
 
-    print("update message is = {}".format(update.message))
-    Chat(update.message)
+    # creates a new chat in list chats if never before
+    current_chat = False
+    for chat in chats:  # searches if chat has previous records
+        if chat.id == update.message.chat.id:
+            current_chat = chat
+            break
+    if not current_chat:
+        current_chat = Chat(update.message)  # creates a new chat
+        chats.append(current_chat)
+
+    current_chat.GotMessage(bot, update.message)
 
     return 'ok'
 
