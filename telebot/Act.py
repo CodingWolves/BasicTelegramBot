@@ -104,7 +104,10 @@ class TextResponse(Act):
         print(chat.data)
         for name in format_names:
             if not name.split('.', 1)[1] in chat.data:
-                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(format_name=name.split('.', 1)[1], chat_id=chat.id))
+                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(
+                    format_name=name.split('.', 1)[1], chat_id=chat.id))
+                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat.data'.format(name.split('.', 1)[1]),
+                                reply_to_message_id=message.message_id)
                 return
         text = self.data.format(user=chat.user, data=chat.data, bot_user_name=bot_user_name)
         if text == "":
