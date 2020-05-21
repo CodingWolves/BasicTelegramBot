@@ -13,7 +13,6 @@ from telebot.Act import InitializeActs
 global bot
 global TOKEN
 global chats
-global initializing
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
