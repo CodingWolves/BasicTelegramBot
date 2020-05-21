@@ -13,6 +13,8 @@ class Act(ABC):
         print("Creating Act {}".format(act['id']))
         if act['type'] == ActType.Text:
             return TextResponse(act)
+        elif act['type'] == ActType.Animation:
+            return AnimationResponse(act)
 
     def __init__(self, act: dict):
         self.id = act['id']
@@ -24,7 +26,8 @@ class Act(ABC):
 
             if 'markup_data' in act:
                 markup_string = act['markup_data']
-                options = [[item for item in row.split(",")] for row in markup_string.split(":")]  # convert it to lists in list
+                options = [[item for item in row.split(",")] for row in
+                           markup_string.split(":")]  # convert it to lists in list
 
                 if markup_type == MarkupType.OneTimeReply:
                     self.markup = ReplyKeyboardMarkup(options, one_time_keyboard=True)
@@ -72,6 +75,12 @@ class PhotoResponse(Act):
 
 class AnimationResponse(Act):
     def doAct(self, bot: Bot, chat, message):
+        url = self.data.format(URL=URL)
+        if url == "":
+            print("act id {} tried sending a null url animation".format(self.id))
+            return
+        bot.sendAnimation(chat_id=chat.id, animation=url,
+                          reply_to_message_id=message.message_id, reply_markup=self.markup)
         pass
 
     pass

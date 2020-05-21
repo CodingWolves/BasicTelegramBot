@@ -1,11 +1,12 @@
 class ActType:
     Text = 'text'
+    Animation = 'animation'
 
 
 class MarkupType:
-    OneTimeReply = 'Reply'
-    StaticReply = 'StaticReply'
-    Remove = 'Remove'
+    OneTimeReply = 'reply'
+    StaticReply = 'static_reply'
+    Remove = 'remove'
 
 
 ActionsDictionary = [
@@ -33,6 +34,12 @@ ActionsDictionary = [
         'data': 'OK'
     },
     {
+        'id': 1001,
+        'triggers': ['bye', 'bye bye', 'byebye', ''],
+        'type': ActType.Animation,
+        'data': '{URL}bye_bye'
+    },
+    {
         'id': 2001,
         'triggers': ['whats my name?', 'what is my name?'],
         'type': ActType.Text,
@@ -46,7 +53,7 @@ ActionsDictionary = [
         'markup_type': MarkupType.StaticReply,
         'markup_data': "hi,bye:hi2,bye2"
     },
-{
+    {
         'id': 3002,
         'triggers': ['options', ''],
         'type': ActType.Text,
