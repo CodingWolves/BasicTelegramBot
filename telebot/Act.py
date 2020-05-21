@@ -83,11 +83,11 @@ class Act(ABC):
         result = None
         if self.follow_up_act_id:
             print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(
-                follow_up_act_id=self.follow_up_act_id, act_id=self.next_act_id))
+                follow_up_act_id=self.follow_up_act_id, act_id=self.id))
             result = Act.getActById(self.follow_up_act_id)
         if self.next_act_id:
             print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id,
-                                                                                      act_id=self.next_act_id))
+                                                                                      act_id=self.id))
             result = Act.getActById(self.next_act_id).doAct(bot, chat, message)
         print("sending")
         print(result)
