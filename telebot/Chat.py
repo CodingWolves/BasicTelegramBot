@@ -9,8 +9,15 @@ from telebot.credentials import bot_user_name, URL
 from time import sleep
 
 
+class Chat:
+    def __init__(self, message):
+        self.chat_id = message.chat.id
+        self.user_id = message['from']['id']
+        print("user_id = {}".format(self.user_id))
+
+
 class Conversation:
-    def __init__(self, bot=telegram.Bot, chat_id=[], user=[]):
+    def __init__(self, bot, chat_id=[], user=[]):
         self.bot = bot
         self.chat_id = chat_id
         self.user = user  # contains id , first_name , is_bot , last_name , language_code
