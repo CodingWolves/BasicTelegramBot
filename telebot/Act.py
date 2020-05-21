@@ -98,6 +98,8 @@ class Act(ABC):
 class TextResponse(Act):
     def doAct(self, bot: Bot, chat, message):
         format_names = getFormatNames(self.data)
+        print('found formant_name ')
+        print(format_names)
         for name in format_names:
             if name not in chat.data:
                 print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(format_name=name, chat_id=chat.id))
@@ -143,7 +145,7 @@ class Command(Act):
     pass
 
 
-class SaveCommand(Command):
+class SaveCommand(Command):  # command cannot change chat.data from this scope , it only get a shadow chat
     def __init__(self, act: dict):
         super(SaveCommand, self).__init__(act)
         act_data = self.data.split('=')
@@ -156,6 +158,7 @@ class SaveCommand(Command):
         chat.data[self.data_name] = self.value.format(text_message=text_message)
         print("data has been changed  ,,,  chat_id - {chat_id} , data_name - {data_name} , text_message={text_message}"
               .format(chat_id=chat.id, data_name=self.data_name, text_message=text_message))
+        print(chat.data[self.data_name])
         return super(SaveCommand, self).doAct(bot, chat, message)
 
 

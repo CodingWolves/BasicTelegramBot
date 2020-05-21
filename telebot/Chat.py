@@ -20,6 +20,7 @@ class Chat:
     def GotMessage(self, bot, message):
         text = message.text.encode('utf-8').decode()
         print("chat - {chat_id} got text_message = {text_message}".format(chat_id=self.id, text_message=text))
+        print("chat continue , follow_up_act={follow_up_act}".format(follow_up_act=self.follow_up_act))
         if self.follow_up_act:
             print("found previous follow_up_act {id} , now acting".format(id=self.follow_up_act.id))
             self.follow_up_act = self.follow_up_act.doAct(bot, self, message)
@@ -32,7 +33,7 @@ class Chat:
         if issubclass(type(act), Act):
             print("doing act - {id}".format(id=act.id))
             follow_up_act = act.doAct(bot, self, message)
-            print("got follow_up_act - {act}".format(act=follow_up_act))
+            print("got follow_up_act - {act_id}".format(act_id=follow_up_act.id))
             if follow_up_act:
                 self.follow_up_act = follow_up_act
                 print("setting as Chat.follow_up_act")
