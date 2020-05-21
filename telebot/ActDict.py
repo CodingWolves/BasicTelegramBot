@@ -69,18 +69,25 @@ ActionsDictionary = [
         'markup_data': "hi,bye:hi2,bye2"
     },
     {
-        'id': 9998,
+        'id': 5001,
         'triggers': ['q1', 'question 1', 'question number 1'],
         'type': ActType.Text,
         'data': 'what is your nickname?',
         'markup_type': MarkupType.Remove,
-        'follow_up_act_id': 9999
+        'follow_up_act_id': 5002
     },
     {
-        'id': 9999,
+        'id': 5002,
         'triggers': [],
         'type': ActType.SaveCommand,
         'data': 'nickname={text_message}',
+        'next_act_id':  5003
+    },
+    {
+        'id': 5002,
+        'triggers': [],
+        'type': ActType.Text,
+        'data': 'now your nickname will be {data.nickname}',
     },
     {
         'id': 10000,
