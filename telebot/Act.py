@@ -41,28 +41,28 @@ class PhotoResponse(Act):
         Act.__init__(self, act)
         self.url = self.data
 
-    def doAct(self, bot: Bot, chat: Chat, message):
+    def doAct(self, bot: Bot, chat, message):
         pass
 
     pass
 
 
 class AnimationResponse(Act):
-    def doAct(self, bot: Bot, chat: Chat, message):
+    def doAct(self, bot: Bot, chat, message):
         pass
 
     pass
 
 
 class SaveResponse(Act):
-    def doAct(self, bot: Bot, chat: Chat, message):
+    def doAct(self, bot: Bot, chat, message):
         pass
 
     pass
 
 
 class QuestionResponse(Act):
-    def doAct(self, bot: Bot, chat: Chat, message):
+    def doAct(self, bot: Bot, chat, message):
         pass
 
     pass
