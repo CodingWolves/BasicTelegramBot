@@ -42,8 +42,16 @@ ActionsDictionary = [
         'id': 3001,
         'triggers': ['options2', ''],
         'type': ActType.Text,
-        'data': 'options2',
+        'data': 'options static',
         'markup_type': MarkupType.StaticReply,
+        'markup_data': "hi,bye:hi2,bye2"
+    },
+{
+        'id': 3002,
+        'triggers': ['options', ''],
+        'type': ActType.Text,
+        'data': 'options one time',
+        'markup_type': MarkupType.OneTimeReply,
         'markup_data': "hi,bye:hi2,bye2"
     },
     {
