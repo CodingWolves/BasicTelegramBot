@@ -19,16 +19,23 @@ class Chat:
 
     def GotMessage(self, bot, message):
         text = message.text.encode('utf-8').decode()
+        print("chat - {chat_id} got text_message = {text_message}".format(chat_id=self.id, text_message=text))
+        print(self)
         if self.follow_up_act:
             self.follow_up_act = self.follow_up_act.doAct(bot, self, message)
             return
             pass
+
+        print("after follow_up_act")
 
         act = Act.getActByTrigger(text)
         if act is Act:
             follow_up_act = act.doAct(bot, self, message)
             if follow_up_act:
                 self.follow_up_act = follow_up_act
+
+        print("end GotMessage")
+
 
 
 user_specific_acts = [{

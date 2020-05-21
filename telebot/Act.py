@@ -31,6 +31,8 @@ class Act(ABC):
         for act in Acts:
             if act.isTriggeredBy(trigger):
                 return act
+        print("did not find an Act for trigger {trigger}".format(trigger=trigger))
+        print(Acts)
 
     @classmethod
     def getActById(cls, act_id):
