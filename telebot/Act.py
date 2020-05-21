@@ -46,13 +46,13 @@ class Act(ABC):
         self.data = act['data']
         self.markup = None
         
-        self.follow_up_act = None
+        self.follow_up_act_id = None
         if 'follow_up_act_id' in act:
-            self.follow_up_act = Act.getActById(act['follow_up_act_id'])
+            self.follow_up_act_id = act['follow_up_act_id']
 
-        self.next_act = None
+        self.next_act_id = None
         if 'next_act_id' in act:
-            self.next_act = Act.getActById(act['next_act_id'])
+            self.next_act_id = act['next_act_id']
 
         if 'markup_type' in act:
             markup_type = act['markup_type']
@@ -80,10 +80,10 @@ class Act(ABC):
     @abstractmethod
     def doAct(self, bot: Bot, chat, message):
         result = None
-        if self.follow_up_act:
-            result = self.follow_up_act
-        if self.next_act:
-            result = self.next_act.doAct(bot, chat, message)
+        if self.follow_up_act_id:
+            result = Act.getActById(self.follow_up_act_id)
+        if self.next_act_id:
+            result = Act.getActById(self.next_act_id).doAct(bot, chat, message)
         return result
 
 
