@@ -64,6 +64,7 @@ def respond():
             break
     if not current_chat:
         current_chat = Chat(update.message)  # creates a new chat
+        print("New chat added id = {}".format(update.message.chat.id))
         chats.append(current_chat)
 
     current_chat.GotMessage(bot, update.message)

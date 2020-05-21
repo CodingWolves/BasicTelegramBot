@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from telegram.bot import Bot
 from telegram.replykeyboardremove import ReplyKeyboardRemove
-from telebot.Chat import Chat
 
 
 class Act(ABC):
@@ -20,20 +19,18 @@ class Act(ABC):
             self.markup = ReplyKeyboardRemove()
         pass
 
-    # def __getitem__(self, item):
-    #     return getattr(self, item)
-
     def isTriggered(self, text: str) -> bool:
         return text in self.triggers
 
     @abstractmethod
-    def doAct(self, bot: Bot):
+    def doAct(self, bot: Bot, chat, message):
         pass
 
 
 class TextResponse(Act):
-    def doAct(self, bot: Bot, chat: Chat, message):
-        bot.sendMessage(chat.chat_id, self.data, reply_to_message_id=message.message_id, reply_markup=self.markup)
+    def doAct(self, bot: Bot, chat, message):
+        bot.sendMessage(chat_id=chat.id, text=self.data,
+                        reply_to_message_id=message.message_id, reply_markup=self.markup)
         pass
 
     pass
@@ -44,28 +41,28 @@ class PhotoResponse(Act):
         Act.__init__(self, act)
         self.url = self.data
 
-    def doAct(self, bot: Bot):
+    def doAct(self, bot: Bot, chat: Chat, message):
         pass
 
     pass
 
 
 class AnimationResponse(Act):
-    def doAct(self, bot: Bot):
+    def doAct(self, bot: Bot, chat: Chat, message):
         pass
 
     pass
 
 
 class SaveResponse(Act):
-    def doAct(self, bot: Bot):
+    def doAct(self, bot: Bot, chat: Chat, message):
         pass
 
     pass
 
 
 class QuestionResponse(Act):
-    def doAct(self, bot: Bot):
+    def doAct(self, bot: Bot, chat: Chat, message):
         pass
 
     pass
