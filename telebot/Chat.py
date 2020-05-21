@@ -12,7 +12,7 @@ from time import sleep
 class Chat:
     def __init__(self, message):
         self.chat_id = message.chat.id
-        self.user_id = message['from']['id']
+        self.user_id = getattr(message, 'from').id
         print("user_id = {}".format(self.user_id))
 
 
