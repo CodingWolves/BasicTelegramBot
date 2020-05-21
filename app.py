@@ -16,7 +16,6 @@ global chats
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
-InitializeActs()
 
 app = Flask(__name__)
 
@@ -99,4 +98,5 @@ def other():
 
 
 if __name__ == '__main__':
+    InitializeActs()
     app.run(threaded=True)
