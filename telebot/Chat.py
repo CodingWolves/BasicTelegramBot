@@ -58,10 +58,11 @@ class Object(object):
             yield item
 
     def __str__(self):
-        str = "["
+        result = "["
         for attr in self._attributes:
-            str += "'{key}': '{value}', ".format(key=attr, value=self.__getattribute__(attr))
-        str += "]"
+            result += "'{key}': '{value}', ".format(key=attr, value=self.__getattribute__(attr))
+        result += "]"
+        return result
     pass
 
 
