@@ -164,7 +164,7 @@ def GetTextFromMessage(message):
 
 
 def getFormatNames(text):
-    names = list
+    names = []
     start_index = text.find('{')
     end_index = text.find('}', start_index)
     while start_index and end_index:
