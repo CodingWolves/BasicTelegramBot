@@ -46,7 +46,7 @@ class Act(ABC):
         self.triggers = act['triggers']
         self.data = act['data']
         self.markup = None
-        
+
         self.follow_up_act_id = None
         if 'follow_up_act_id' in act:
             self.follow_up_act_id = act['follow_up_act_id']
@@ -82,9 +82,14 @@ class Act(ABC):
     def doAct(self, bot: Bot, chat, message):
         result = None
         if self.follow_up_act_id:
+            print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(follow_up_act_id=self.follow_up_act_id, act_id=self.next_act_id))
             result = Act.getActById(self.follow_up_act_id)
         if self.next_act_id:
+            print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id, act_id=self.next_act_id))
             result = Act.getActById(self.next_act_id).doAct(bot, chat, message)
+        print("sending")
+        print(result)
+        print("sent")
         return result
 
 
@@ -117,7 +122,6 @@ class AnimationResponse(Act):
 
 class PhotoResponse(Act):
     def doAct(self, bot: Bot, chat, message):
-
         return super(PhotoResponse, self).doAct(bot, chat, message)
         pass
 
@@ -143,6 +147,8 @@ class SaveCommand(Command):
     def doAct(self, bot: Bot, chat, message):
         text_message = GetTextFromMessage(message)
         chat.data[self.data_name] = self.value.format(text_message=text_message)
+        print("data has been changed  ,,,  chat_id - {chat_id} , data_name - {data_name} , text_message={text_message}"
+              .format(chat_id=chat.id, data_name=self.data_name, text_message=text_message))
         return super(SaveCommand, self).doAct(bot, chat, message)
 
 
