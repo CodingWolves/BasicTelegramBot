@@ -79,7 +79,7 @@ class Act(ABC):
 
     @abstractmethod
     def doAct(self, bot: Bot, chat, message):
-        result: Act
+        result = None
         if self.follow_up_act:
             result = self.follow_up_act
         if self.next_act:

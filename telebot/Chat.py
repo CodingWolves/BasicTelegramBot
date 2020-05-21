@@ -1,7 +1,7 @@
 import telegram
 
 from telebot.credentials import bot_user_name, URL
-from telebot.Act import Act, FollowUp
+from telebot.Act import Act
 
 from time import sleep
 
@@ -29,6 +29,7 @@ class Chat:
             follow_up_act = act.doAct(bot, self, message)
             if follow_up_act:
                 self.follow_up_act = follow_up_act
+
 
 user_specific_acts = [{
     'triggers': ['whats my name?', 'what is my name?'],

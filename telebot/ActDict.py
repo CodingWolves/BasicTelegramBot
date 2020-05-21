@@ -79,19 +79,19 @@ ActionsDictionary = [
     {
         'id': 9999,
         'triggers': [],
-        'type': ActType.Command,
+        'type': ActType.SaveCommand,
         'data': 'nickname={text_message}',
     },
     {
         'id': 10000,
         'triggers': ['reset nickname'],
-        'type': ActType.Command,
+        'type': ActType.SaveCommand,
         'data': 'nickname=',
     },
     {
         'id': 10100,
         'triggers': ['calc', 'calculate'],
-        'type': ActType.Command,
+        'type': ActType.SaveCommand,
         'data': 'enter your equation now',
     }
 
