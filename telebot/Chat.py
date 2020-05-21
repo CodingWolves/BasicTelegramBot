@@ -17,6 +17,10 @@ class Chat:
 
     def __init__(self, message):
         self.id = message.chat.id
+        self.user = {
+            'first_name': message.chat.first_name,
+            'last_name': message.chat.last_name,
+        }
         self.unhandled_messages = []
 
     def GotMessage(self, bot, message):
