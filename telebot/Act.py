@@ -4,7 +4,15 @@ from telegram.replykeyboardremove import ReplyKeyboardRemove
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
 from telebot.credentials import bot_user_name, URL
-from telebot.ActDict import MarkupType, ActType
+from telebot.ActDict import *
+
+global Acts
+
+
+def InitializeActs():
+    print("<<<<<<<<<<!!!Acts Created!!!>>>>>>>>>>")
+    global Acts
+    Acts = [Act.CreateAct(act_dict) for act_dict in ActionsDictionary]
 
 
 class Act(ABC):
@@ -15,12 +23,37 @@ class Act(ABC):
             return TextResponse(act)
         elif act['type'] == ActType.Animation:
             return AnimationResponse(act)
+        elif act['type'] == ActType.SaveCommand:
+            return SaveCommand(act)
+
+    @classmethod
+    def getActByTrigger(cls, trigger):
+        for act in Acts:
+            if act.isTriggeredBy(trigger):
+                return act
+
+    @classmethod
+    def getActById(cls, act_id):
+        for act in Acts:
+            if act.id == act_id:
+                act: Act
+                return act
 
     def __init__(self, act: dict):
+        self.original_dict = act
         self.id = act['id']
         self.triggers = act['triggers']
         self.data = act['data']
         self.markup = None
+        
+        self.follow_up_act = None
+        if 'follow_up_act_id' in act:
+            self.follow_up_act = Act.getActById(act['follow_up_act_id'])
+
+        self.next_act = None
+        if 'next_act_id' in act:
+            self.next_act = Act.getActById(act['next_act_id'])
+
         if 'markup_type' in act:
             markup_type = act['markup_type']
 
@@ -46,29 +79,23 @@ class Act(ABC):
 
     @abstractmethod
     def doAct(self, bot: Bot, chat, message):
-        pass
+        result: Act
+        if self.follow_up_act:
+            result = self.follow_up_act
+        if self.next_act:
+            result = self.next_act.doAct(bot, chat, message)
+        return result
 
 
 class TextResponse(Act):
     def doAct(self, bot: Bot, chat, message):
-        text = self.data.format(user=chat.user, bot_user_name=bot_user_name)
+        text = self.data.format(user=chat.user, data=chat.data, bot_user_name=bot_user_name)
         if text == "":
-            print("act id {} tried sending a null text".format(self.id))
+            print("error - act id {} tried sending a null text".format(self.id))
             return
         bot.sendMessage(chat_id=chat.id, text=text,
                         reply_to_message_id=message.message_id, reply_markup=self.markup)
-        pass
-
-    pass
-
-
-class PhotoResponse(Act):
-    def __init__(self, act: dict):
-        Act.__init__(self, act)
-        self.url = self.data
-
-    def doAct(self, bot: Bot, chat, message):
-        pass
+        return super(TextResponse, self).doAct(bot, chat, message)
 
     pass
 
@@ -81,20 +108,42 @@ class AnimationResponse(Act):
             return
         bot.sendAnimation(chat_id=chat.id, animation=url,
                           reply_to_message_id=message.message_id, reply_markup=self.markup)
+        return super(AnimationResponse, self).doAct(bot, chat, message)
         pass
 
     pass
 
 
-class SaveResponse(Act):
+class PhotoResponse(Act):
     def doAct(self, bot: Bot, chat, message):
+
+        return super(PhotoResponse, self).doAct(bot, chat, message)
         pass
 
     pass
 
 
-class QuestionResponse(Act):
+class Command(Act):
+    def __init__(self, act: dict):
+        super(Command, self).__init__(act)
+        pass
+
+    pass
+
+
+class SaveCommand(Command):
+    def __init__(self, act: dict):
+        super(SaveCommand, self).__init__(act)
+        act_data = self.data.split('=')
+        self.data_name = act_data[0]
+        self.value = act_data[1]
+        self.caller_act = act
+
     def doAct(self, bot: Bot, chat, message):
-        pass
+        text_message = GetTextFromMessage(message)
+        chat.data[self.data_name] = self.value.format(text_message=text_message)
+        return super(SaveCommand, self).doAct(bot, chat, message)
 
-    pass
+
+def GetTextFromMessage(message):
+    return message.text.encode('utf-8').decode()

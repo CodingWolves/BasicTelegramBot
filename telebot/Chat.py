@@ -1,140 +1,34 @@
 import telegram
-from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
-from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
-from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
-from telegram.chataction import ChatAction
 
 from telebot.credentials import bot_user_name, URL
-from telebot.Act import Act
-from telebot.ActDict import ActionsDictionary
+from telebot.Act import Act, FollowUp
 
 from time import sleep
 
 
 class Chat:
-    print("<<<<<<<<<<!!!Acts Created!!!>>>>>>>>>>")
-    Acts = [Act.CreateAct(act_dict) for act_dict in ActionsDictionary]
-
     def __init__(self, message):
         self.id = message.chat.id
         self.user = {
             'first_name': message.chat.first_name,
             'last_name': message.chat.last_name,
         }
+        self.data = {}
+        self.follow_up_act = False
         self.unhandled_messages = []
 
     def GotMessage(self, bot, message):
         text = message.text.encode('utf-8').decode()
-        for act in Chat.Acts:
-            if act.isTriggeredBy(text):
-                act.doAct(bot, self, message)
-                break
-        else:
-            self.unhandled_messages.append(message)
-            print("this message is unhandled {} saved to unhandled in chat id {}".format(message, self.id))
+        if self.follow_up_act:
+            self.follow_up_act = self.follow_up_act.doAct(bot, self, message)
+            return
+            pass
 
-
-class Conversation:
-    def __init__(self, chat_id=[], user=[]):
-        self.chat_id = chat_id
-        self.user = user  # contains id , first_name , is_bot , last_name , language_code
-        pass
-
-    def __getitem__(self, item):
-        return getattr(self, item)
-
-    def MessageAct(self, bot, message):
-        text = message.text.encode('utf-8').decode()
-        markup = None
-
-        for act in fast_text_responses:
-            if text in act['triggers']:
-                return Response.SendText(bot, message, act['response'])
-
-        for act in fast_animation_responses:
-            if text in act['triggers']:
-                return Response.SendAnimation(bot, message, act['response'])
-
-        for act in user_specific_acts:
-            if text in act['triggers']:
-                response = act['response']
-                if "{ReplyMarkup:" in response:
-                    string_values = getFormatValues(response, 'ReplyMarkup')
-                    options = convertStringToSquaredList(string_values)
-                    markup = Response.makeReplyMarkup(options)
-                    response = removeFormatName(response, "ReplyMarkup")
-                    pass
-                if "{InlineMarkup:" in response:
-                    string_values = getFormatValues(response, 'InlineMarkup')
-                    options = convertStringToSquaredList(string_values)
-                    options = [[InlineKeyboardButton(item, callback_data=item) for item in row] for row in options]
-                    markup = Response.makeInlineMarkup(options)
-                    response = removeFormatName(response, "InlineMarkup")
-                    pass
-                response = response.format(user=self.user, bot_user_name=bot_user_name)
-                return Response.SendText(bot, message, response, markup=markup)
-
-        url = "https://api.adorable.io/avatars/285/{}.png".format(text.strip())
-        Response.SendPhoto(bot, message, url)
-
-        pass  # Act
-
-
-class Response:
-
-    @staticmethod
-    def SendAnimation(bot, message, url, markup=None):
-        if markup is None:
-            markup = telegram.ReplyKeyboardRemove()
-        return bot.send_animation(chat_id=message.chat.id, animation=url,
-                                  reply_to_message_id=message.message_id, reply_markup=markup)
-
-    @staticmethod
-    def SendPhoto(bot, message, url):
-        bot.sendPhoto(chat_id=message.chat.id, photo=url, reply_to_message_id=message.message_id)
-
-    @staticmethod
-    def SendText(bot, message, send_text, markup=None):
-        if markup is None:
-            markup = telegram.ReplyKeyboardRemove()
-        return bot.sendMessage(chat_id=message.chat.id, text=send_text,
-                               reply_to_message_id=message.message_id, reply_markup=markup)
-
-    @staticmethod
-    def SendTyping(bot, message):
-        bot.sendChatAction(chat_id=message.chat.id, action=ChatAction.TYPING)
-
-    @staticmethod
-    def makeReplyMarkup(options):
-        return ReplyKeyboardMarkup(options)
-
-    @staticmethod
-    def makeInlineMarkup(options):
-        return InlineKeyboardMarkup(options)
-
-
-fast_text_responses = [{
-    'triggers': ['hi', 'hello', 'hi2'],
-    'response': 'hello to you too :)'
-}, {
-    'triggers': ['/start'],
-    'response':  """
-            Welcome to coolAvatar bot, 
-            the bot is using the service from http://avatars.adorable.io/ 
-            to generate cool looking avatars based on the name you enter 
-            so please enter a name and the bot will reply with an avatar for your name.
-        """
-}, {
-    'triggers': ['ok', 'okay', 'ko'],
-    'response':  'OK'
-},
-]
-
-fast_animation_responses = [{
-    'triggers': ['bye bye', 'bye', 'goodbye'],
-    'response': '{}bye_bye'.format(URL),
-},
-]
+        act = Act.getActByTrigger(text)
+        if act is Act:
+            follow_up_act = act.doAct(bot, self, message)
+            if follow_up_act:
+                self.follow_up_act = follow_up_act
 
 user_specific_acts = [{
     'triggers': ['whats my name?', 'what is my name?'],

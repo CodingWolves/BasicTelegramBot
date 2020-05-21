@@ -15,6 +15,7 @@ global chats
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
+Act.InitializeActs()
 
 app = Flask(__name__)
 

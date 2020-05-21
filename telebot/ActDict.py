@@ -1,6 +1,7 @@
 class ActType:
     Text = 'text'
     Animation = 'animation'
+    SaveCommand = 'save_command'
 
 
 class MarkupType:
@@ -46,6 +47,12 @@ ActionsDictionary = [
         'data': 'your name is {user.first_name}'
     },
     {
+        'id': 2002,
+        'triggers': ['whats my nickname?', 'what is my nickname?', 'my nickname?'],
+        'type': ActType.Text,
+        'data': 'your name is {data.nickname}'
+    },
+    {
         'id': 3001,
         'triggers': ['options2', ''],
         'type': ActType.Text,
@@ -55,16 +62,37 @@ ActionsDictionary = [
     },
     {
         'id': 3002,
-        'triggers': ['options', ''],
+        'triggers': ['options', '/help'],
         'type': ActType.Text,
         'data': 'options one time',
         'markup_type': MarkupType.OneTimeReply,
         'markup_data': "hi,bye:hi2,bye2"
     },
     {
-        'id': 0,
-        'triggers': ['', ''],
+        'id': 9998,
+        'triggers': ['q1', 'question 1', 'question number 1'],
         'type': ActType.Text,
-        'data': ''
+        'data': 'what is your nickname?',
+        'markup_type': MarkupType.Remove,
+        'follow_up_act_id': 9999
     },
+    {
+        'id': 9999,
+        'triggers': [],
+        'type': ActType.Command,
+        'data': 'nickname={text_message}',
+    },
+    {
+        'id': 10000,
+        'triggers': ['reset nickname'],
+        'type': ActType.Command,
+        'data': 'nickname=',
+    },
+    {
+        'id': 10100,
+        'triggers': ['calc', 'calculate'],
+        'type': ActType.Command,
+        'data': 'enter your equation now',
+    }
+
 ]
