@@ -18,6 +18,7 @@ TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
 initializing = False
+print(2)
 
 app = Flask(__name__)
 
@@ -26,11 +27,14 @@ app = Flask(__name__)
 # heroku logs -a start-telegram-bot --tail
 
 def InitializeServer():
+    print('trying to initialize')
     if not initializing:
+        print('initializing...')
         global initializing
         initializing = True
         InitializeActs()
         initializing = False
+        print('initializing ended')
 
 
 InitializeServer()
@@ -38,6 +42,7 @@ InitializeServer()
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
+    print('respond function')
     if initializing:
         return 'ok'
 
@@ -90,6 +95,7 @@ def respond():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
+    print('set_webhook function')
     if initializing:
         return 'ok'
 
@@ -107,14 +113,16 @@ def set_webhook():
 
 @app.route('/')
 def index():
+    print('index function')
     return '.1'
 
 
 @app.route('/bye_bye')
 def other():
+    print('other function')
     return send_file('animations/bye_bye.mp4')
 
 
 if __name__ == '__main__':
-    InitializeServer()
+    print('main function started')
     app.run(threaded=True)
