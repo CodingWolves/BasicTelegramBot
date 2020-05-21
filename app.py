@@ -13,6 +13,7 @@ from telebot.Act import InitializeActs
 global bot
 global TOKEN
 global chats
+global initializing
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
@@ -28,15 +29,12 @@ app = Flask(__name__)
 def InitializeServer():
     print('trying to initialize')
     if not initializing:
-        print('initializing...')
         global initializing
+        print('initializing...')
         initializing = True
         InitializeActs()
         initializing = False
         print('initializing ended')
-
-
-InitializeServer()
 
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
