@@ -49,6 +49,9 @@ class Act(ABC):
 class TextResponse(Act):
     def doAct(self, bot: Bot, chat, message):
         text = self.data.format(user=chat.user, bot_user_name=bot_user_name)
+        if text == "":
+            print("act id {} tried sending a null text".format(self.id))
+            return
         bot.sendMessage(chat_id=chat.id, text=text,
                         reply_to_message_id=message.message_id, reply_markup=self.markup)
         pass

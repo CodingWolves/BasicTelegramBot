@@ -42,7 +42,7 @@ ActionsDictionary = [
         'id': 3001,
         'triggers': ['options2', ''],
         'type': ActType.Text,
-        'data': '',
+        'data': 'options2',
         'markup_type': MarkupType.StaticReply,
         'markup_data': "hi,bye:hi2,bye2"
     },
