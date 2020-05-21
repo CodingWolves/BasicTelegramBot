@@ -91,8 +91,15 @@ ActionsDictionary = [
     {
         'id': 10100,
         'triggers': ['calc', 'calculate'],
-        'type': ActType.SaveCommand,
+        'type': ActType.Text,
         'data': 'enter your equation now',
+        'follow_up_act_id': 10101
+    },
+    {
+        'id': 10101,
+        'triggers': [],
+        'type': ActType.SaveCommand,
+        'data': 'equation={text_message}'
     }
 
 ]
