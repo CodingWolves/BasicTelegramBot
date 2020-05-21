@@ -103,7 +103,7 @@ class TextResponse(Act):
         print("chat.data")
         print(chat.data)
         for name in format_names:
-            if name not in chat.data:
+            if name.split('.')[1] not in chat.data:
                 print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(format_name=name, chat_id=chat.id))
                 return
         text = self.data.format(user=chat.user, data=chat.data, bot_user_name=bot_user_name)
