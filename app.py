@@ -13,11 +13,11 @@ from telebot.Act import InitializeActs
 global bot
 global TOKEN
 global chats
-global initializing
+global initializing_server
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
-initializing = False
+initializing_server = False
 print(2)
 
 app = Flask(__name__)
@@ -28,19 +28,19 @@ app = Flask(__name__)
 
 def InitializeServer():
     print('trying to initialize')
-    if not initializing:
-        global initializing
-        print('initializing...')
-        initializing = True
+    if not initializing_server:
+        global initializing_server
+        print('initializing_server...')
+        initializing_server = True
         InitializeActs()
-        initializing = False
-        print('initializing ended')
+        initializing_server = False
+        print('initializing_server ended')
 
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
     print('respond function')
-    if initializing:
+    if initializing_server:
         return 'ok'
 
     # retrieve the message in JSON and then transform it to Telegram object
@@ -93,7 +93,7 @@ def respond():
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
     print('set_webhook function')
-    if initializing:
+    if initializing_server:
         return 'ok'
 
     webhook_ok = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
