@@ -4,6 +4,7 @@ from time import sleep
 from flask import Flask, request, send_file
 
 import telegram
+from telegram.botcommand import BotCommand
 
 from telebot.credentials import bot_token, bot_user_name, URL
 from telebot.Chat import *
