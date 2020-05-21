@@ -82,10 +82,12 @@ class Act(ABC):
     def doAct(self, bot: Bot, chat, message):
         result = None
         if self.follow_up_act_id:
-            print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(follow_up_act_id=self.follow_up_act_id, act_id=self.next_act_id))
+            print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(
+                follow_up_act_id=self.follow_up_act_id, act_id=self.next_act_id))
             result = Act.getActById(self.follow_up_act_id)
         if self.next_act_id:
-            print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id, act_id=self.next_act_id))
+            print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id,
+                                                                                      act_id=self.next_act_id))
             result = Act.getActById(self.next_act_id).doAct(bot, chat, message)
         print("sending")
         print(result)
@@ -95,6 +97,11 @@ class Act(ABC):
 
 class TextResponse(Act):
     def doAct(self, bot: Bot, chat, message):
+        format_names = getFormatNames(self.data)
+        for name in format_names:
+            if name not in chat.data:
+                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(format_name=name, chat_id=chat.id))
+                return
         text = self.data.format(user=chat.user, data=chat.data, bot_user_name=bot_user_name)
         if text == "":
             print("error - act id {} tried sending a null text".format(self.id))
@@ -154,3 +161,15 @@ class SaveCommand(Command):
 
 def GetTextFromMessage(message):
     return message.text.encode('utf-8').decode()
+
+
+def getFormatNames(text):
+    names = list
+    start_index = text.find('{')
+    end_index = text.find('}', start_index)
+    while start_index and end_index:
+        names.append(text[start_index:end_index + 1])
+        text = text[:start_index] + text[end_index + 1:]
+        start_index = text.find('{')
+        end_index = text.find('}', start_index)
+    return names
