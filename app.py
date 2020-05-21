@@ -8,6 +8,7 @@ from telegram.botcommand import BotCommand
 
 from telebot.credentials import bot_token, bot_user_name, URL
 from telebot.Chat import *
+from telebot.Act import InitializeActs
 
 global bot
 global TOKEN
@@ -15,7 +16,7 @@ global chats
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
-Act.InitializeActs()
+InitializeActs()
 
 app = Flask(__name__)
 
