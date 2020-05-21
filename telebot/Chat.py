@@ -22,7 +22,7 @@ class Chat:
     def GotMessage(self, bot, message):
         text = message.text.encode('utf-8').decode()
         for act in Chat.Acts:
-            if text in act.triggers:
+            if act.isTriggeredBy(text):
                 act.doAct(bot, self, message)
                 break
         else:

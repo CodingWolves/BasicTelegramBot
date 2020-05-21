@@ -14,12 +14,13 @@ class Act(ABC):
         self.id = act['id']
         self.triggers = act['triggers']
         self.data = act['data']
-        self.markup = act['markup']
-        if self.markup is None:
+        if 'markup' in act:
+            self.markup = act['markup']
+        else:
             self.markup = ReplyKeyboardRemove()
         pass
 
-    def isTriggered(self, text: str) -> bool:
+    def isTriggeredBy(self, text: str) -> bool:
         return text in self.triggers
 
     @abstractmethod
