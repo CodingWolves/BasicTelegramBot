@@ -31,10 +31,10 @@ class Chat:
 
         act = Act.getActByTrigger(text)
         if issubclass(type(act), Act):
-            print("doing act - {id}".format(id=act.id))
+            print("doing act - {id} after text = {text}".format(id=act.id, text=text))
             follow_up_act = act.doAct(bot, self, message)
-            print("got follow_up_act - {act_id}".format(act_id=follow_up_act.id))
             if follow_up_act:
+                print("got follow_up_act - {act_id}".format(act_id=follow_up_act.id))
                 self.follow_up_act = follow_up_act
                 print("setting as Chat.follow_up_act")
 
