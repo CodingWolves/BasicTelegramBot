@@ -84,7 +84,7 @@ ActionsDictionary = [
         'next_act_id':  5003
     },
     {
-        'id': 5002,
+        'id': 5003,
         'triggers': [],
         'type': ActType.Text,
         'data': 'now your nickname will be {data.nickname}',
