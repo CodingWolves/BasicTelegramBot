@@ -173,7 +173,7 @@ def getFormatNames(text):
     start_index = text.find('{')
     end_index = text.find('}', start_index)
     while start_index != -1 and end_index != -1:
-        names.append(text[start_index:end_index + 1])
+        names.append(text[start_index + 1:end_index])
         text = text[:start_index] + text[end_index + 1:]
         start_index = text.find('{')
         end_index = text.find('}', start_index)
