@@ -18,9 +18,10 @@ class Act(ABC):
         self.id = act['id']
         self.triggers = act['triggers']
         self.data = act['data']
+        self.markup = None
         if 'markup_type' in act:
             markup_type = act['markup_type']
-            
+
             if 'markup_data' in act:
                 markup_string = act['markup_data']
                 options = [[item for item in row.split(",")] for row in markup_string.split(":")]  # convert it to lists in list
