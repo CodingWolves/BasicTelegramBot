@@ -100,6 +100,8 @@ class TextResponse(Act):
         format_names = getFormatNames(self.data)
         print('found formant_name ')
         print(format_names)
+        print("chat.data")
+        print(chat.data)
         for name in format_names:
             if name not in chat.data:
                 print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(format_name=name, chat_id=chat.id))
