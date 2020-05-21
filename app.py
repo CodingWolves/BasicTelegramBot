@@ -13,9 +13,11 @@ from telebot.Act import InitializeActs
 global bot
 global TOKEN
 global chats
+global initializing
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
+initializing = False
 
 app = Flask(__name__)
 
@@ -23,9 +25,22 @@ app = Flask(__name__)
 # to see logs in REAL TIME login through Heroku CLI(CMD) and write the following line
 # heroku logs -a start-telegram-bot --tail
 
+def InitializeServer():
+    if not initializing:
+        global initializing
+        initializing = True
+        InitializeActs()
+        initializing = False
+
+
+InitializeServer()
+
 
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
+    if initializing:
+        return 'ok'
+
     # retrieve the message in JSON and then transform it to Telegram object
     update = telegram.Update.de_json(request.get_json(force=True), bot)
 
@@ -75,6 +90,9 @@ def respond():
 
 @app.route('/set_webhook', methods=['GET', 'POST'])
 def set_webhook():
+    if initializing:
+        return 'ok'
+
     webhook_ok = bot.setWebhook('{URL}{HOOK}'.format(URL=URL, HOOK=TOKEN))
     # sends telegram a list of optional slashed commands
     commands = [BotCommand('/start', 'starts the process'),
@@ -98,5 +116,5 @@ def other():
 
 
 if __name__ == '__main__':
-    InitializeActs()
+    InitializeServer()
     app.run(threaded=True)
