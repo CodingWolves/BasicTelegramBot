@@ -147,7 +147,7 @@ class Command(Act):
     pass
 
 
-class SaveCommand(Command):  # command cannot change chat.data from this scope , it only get a shadow chat
+class SaveCommand(Command):
     def __init__(self, act: dict):
         super(SaveCommand, self).__init__(act)
         act_data = self.data.split('=')

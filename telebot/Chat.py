@@ -13,7 +13,7 @@ class Chat:
             'first_name': message.chat.first_name,
             'last_name': message.chat.last_name,
         }
-        self.data = {}
+        self.data = Object()
         self.follow_up_act = False
         self.unhandled_messages = []
 
@@ -39,6 +39,30 @@ class Chat:
                 print("setting as Chat.follow_up_act")
 
         print("end GotMessage")
+
+
+class Object(object):
+    def __init__(self):
+        self._attributes = []
+
+    def __setitem__(self, key, value):
+        if key not in self._attributes:
+            self._attributes.append(key)
+        self.__setattr__(key, value)
+
+    def __getitem__(self, item):
+        self.__getattribute__(item)
+
+    def __iter__(self):
+        for item in self._attributes:
+            yield item
+
+    def __str__(self):
+        str = "["
+        for attr in self._attributes:
+            str += "'{key}': '{value}', ".format(key=attr, value=self.__getattribute__(attr))
+        str += "]"
+    pass
 
 
 user_specific_acts = [{
