@@ -37,6 +37,9 @@ def InitializeServer():
         print('ini_server_1_2_3 ended')
 
 
+def InitializeServer():
+
+
 @app.route('/{}'.format(TOKEN), methods=['POST'])
 def respond():
     print('respond function')
