@@ -28,8 +28,8 @@ app = Flask(__name__)
 
 def InitializeServer():
     print('trying to initialize')
+    global ini_server_1_2_3
     if not ini_server_1_2_3:
-        global ini_server_1_2_3
         print('ini_server_1_2_3...')
         ini_server_1_2_3 = True
         InitializeActs()
