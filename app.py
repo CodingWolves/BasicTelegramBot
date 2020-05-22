@@ -79,6 +79,8 @@ def respond():
     # con = Conversation(update.message.chat.id, user=update.message.chat)
     # con.MessageAct(bot, message=update.message)
 
+    global chats
+
     # creates a new chat in list chats if never before
     current_chat = False
     for chat in chats:  # searches if chat has previous records
