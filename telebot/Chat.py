@@ -36,7 +36,7 @@ class Chat:
             if follow_up_act:
                 print("got follow_up_act - {act_id}".format(act_id=follow_up_act.id))
                 self.follow_up_act = follow_up_act
-                print("setting as Chat.follow_up_act")
+                print("setting as Chat.follow_up_act - now follow up id is {}".format(self.follow_up_act.id))
 
         print("end GotMessage")
 
