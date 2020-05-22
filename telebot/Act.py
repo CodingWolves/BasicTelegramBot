@@ -155,6 +155,7 @@ class SaveCommand(Command):
     def __init__(self, act: dict):
         super(SaveCommand, self).__init__(act)
         self.data_name = act['save_to_data_name']
+        self.eval = False
         if 'evaluate' in act:
             self.eval = act['evaluate']
 
@@ -164,35 +165,16 @@ class SaveCommand(Command):
 
         if self.eval:
             try:
+                data = chat.data
                 eval_result = eval(save_text)
                 chat.data[self.data_name] = eval_result
             except:
-                print("eval '{}' cannot be evaluated ".format(self.eval))
+                print("eval '{}' cannot be evaluated ".format(save_text))
         else:
-            chat.data[self.data_name] = self.data.format(text_message=text_message, data=chat.data)
+            chat.data[self.data_name] = save_text
 
         print("data has been changed  ,,,  chat_id - {} , data_name - {} , value={}"
               .format(chat.id, self.data_name, chat.data[self.data_name]))
-        return super(SaveCommand, self).doAct(bot, chat, message)
-
-
-class EvalCommand(Command):
-    def __init__(self, act: dict):
-        super(EvalCommand, self).__init__(act)
-        self.data = act['data']
-
-    def doAct(self, bot: Bot, chat, message):
-        format_names = getFormatNames(self.data)
-        for name in format_names:
-            if not name.split('.', 1)[1] in chat.data:
-                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(
-                    format_name=name.split('.', 1)[1], chat_id=chat.id))
-                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat.data'.format(name.split('.', 1)[1]),
-                                reply_to_message_id=message.message_id)
-                return
-        eval_string = self.data.format(data=chat.data)
-        print("eval_string = '{eval}'  ,,,  chat_id - {chat_id}".format(chat_id=chat.id, eval=eval_string))
-        print("after eval {eval}".format(eval(eval_string)))
         return super(SaveCommand, self).doAct(bot, chat, message)
 
 
