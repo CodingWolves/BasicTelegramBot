@@ -170,7 +170,9 @@ class SaveCommand(Command):
                 chat.data[self.data_name] = eval_result
             except:
                 print("eval '{}' cannot be evaluated ".format(save_text))
-                bot.sendMessage("eval '{}' cannot be evaluated chat_id= ".format(save_text, chat.id))
+                bot.sendMessage(chat_id=chat.id,
+                                text="eval '{}' cannot be evaluated chat_id={}".format(save_text, chat.id),
+                                reply_to_message_id=message.message_id)
                 return
         else:
             chat.data[self.data_name] = save_text
