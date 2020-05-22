@@ -80,7 +80,8 @@ ActionsDictionary = [
         'id': 5002,
         'triggers': [],
         'type': ActType.SaveCommand,
-        'data': 'nickname={text_message}',
+        'data': '{text_message}',
+        'save_to_data_name': 'nickname',
         'next_act_id':  5003
     },
     {
@@ -90,10 +91,11 @@ ActionsDictionary = [
         'data': 'now your nickname will be {data.nickname}',
     },
     {
-        'id': 10000,
+        'id': 5000,
         'triggers': ['reset nickname'],
         'type': ActType.SaveCommand,
-        'data': 'nickname=',
+        'data': '',
+        'save_to_data_name': 'nickname'
     },
     {
         'id': 10100,
@@ -106,7 +108,17 @@ ActionsDictionary = [
         'id': 10101,
         'triggers': [],
         'type': ActType.SaveCommand,
-        'data': 'equation={text_message}'
+        'data': '{text_message}',
+        'save_to_data_name': 'equation',
+        'next_act_id': 10102
+    },
+    {
+        'id': 10102,
+        'triggers': [],
+        'type': ActType.SaveCommand,
+        'data': '{data.equation}',
+        'save_to_data_name': 'equation_eval',
+        'evaluate': True
     }
 
 ]

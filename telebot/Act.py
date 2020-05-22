@@ -75,12 +75,13 @@ class Act(ABC):
                 pass
         pass
 
-    def isTriggeredBy(self, text: str) -> bool:
-        return text in self.triggers
+    def isTriggeredBy(self, text_message: str) -> bool:
+        return text_message in self.triggers
 
     @abstractmethod
     def doAct(self, bot: Bot, chat, message):
         result = None
+        print("doing super() in act - {}".format(self.id))
         if self.follow_up_act_id:
             print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(
                 follow_up_act_id=self.follow_up_act_id, act_id=self.id))
@@ -142,7 +143,7 @@ class PhotoResponse(Act):
     pass
 
 
-class Command(Act):
+class Command(Act, ABC):
     def __init__(self, act: dict):
         super(Command, self).__init__(act)
         pass
@@ -153,17 +154,45 @@ class Command(Act):
 class SaveCommand(Command):
     def __init__(self, act: dict):
         super(SaveCommand, self).__init__(act)
-        act_data = self.data.split('=')
-        self.data_name = act_data[0]
-        self.value = act_data[1]
-        self.caller_act = act
+        self.data_name = act['save_to_data_name']
+        if 'evaluate' in act:
+            self.eval = act['evaluate']
 
     def doAct(self, bot: Bot, chat, message):
         text_message = GetTextFromMessage(message)
-        chat.data[self.data_name] = self.value.format(text_message=text_message)
-        print("data has been changed  ,,,  chat_id - {chat_id} , data_name - {data_name} , text_message={text_message}"
-              .format(chat_id=chat.id, data_name=self.data_name, text_message=text_message))
-        print(chat.data[self.data_name])
+        save_text = self.data.format(text_message=text_message, data=chat.data)
+
+        if self.eval:
+            try:
+                eval_result = eval(save_text)
+                chat.data[self.data_name] = eval_result
+            except:
+                print("eval '{}' cannot be evaluated ".format(self.eval))
+        else:
+            chat.data[self.data_name] = self.data.format(text_message=text_message, data=chat.data)
+
+        print("data has been changed  ,,,  chat_id - {} , data_name - {} , value={}"
+              .format(chat.id, self.data_name, chat.data[self.data_name]))
+        return super(SaveCommand, self).doAct(bot, chat, message)
+
+
+class EvalCommand(Command):
+    def __init__(self, act: dict):
+        super(EvalCommand, self).__init__(act)
+        self.data = act['data']
+
+    def doAct(self, bot: Bot, chat, message):
+        format_names = getFormatNames(self.data)
+        for name in format_names:
+            if not name.split('.', 1)[1] in chat.data:
+                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(
+                    format_name=name.split('.', 1)[1], chat_id=chat.id))
+                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat.data'.format(name.split('.', 1)[1]),
+                                reply_to_message_id=message.message_id)
+                return
+        eval_string = self.data.format(data=chat.data)
+        print("eval_string = '{eval}'  ,,,  chat_id - {chat_id}".format(chat_id=chat.id, eval=eval_string))
+        print("after eval {eval}".format(eval(eval_string)))
         return super(SaveCommand, self).doAct(bot, chat, message)
 
 
