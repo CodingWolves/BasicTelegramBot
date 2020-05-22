@@ -166,12 +166,12 @@ class SaveCommand(Command):
         if self.eval:
             try:
                 data = chat.data
-                eval_result = eval(save_text) # very risky move , can be hacked in a second
+                eval_result = eval(save_text)  # very risky move , can be hacked in a second
                 chat.data[self.data_name] = eval_result
             except:
-                print("eval '{}' cannot be evaluated ".format(save_text))
+                print("eval '{}' cannot be evaluated chat_id={} ".format(save_text, chat.id))
                 bot.sendMessage(chat_id=chat.id,
-                                text="eval '{}' cannot be evaluated chat_id={}".format(save_text, chat.id),
+                                text="eval '{}' cannot be evaluated".format(save_text),
                                 reply_to_message_id=message.message_id)
                 return
         else:
