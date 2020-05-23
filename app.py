@@ -10,16 +10,20 @@ from telebot.credentials import bot_token, bot_user_name, URL
 from telebot.Chat import *
 from telebot.Act import InitializeActs
 
+from datetime import datetime
+
 global bot
 global TOKEN
 global chats
 global initializing_server
 global initialized
+global datetime_of_start
 TOKEN = bot_token
 bot = telegram.Bot(token=TOKEN)
 chats = []
 initializing_server = False
 initialized = False
+datetime_of_start = datetime.now()
 print(2)
 
 app = Flask(__name__)
@@ -118,7 +122,7 @@ def set_webhook():
 @app.route('/')
 def index():
     print('index function')
-    return '.1'
+    return 'server started at {}'.format(datetime_of_start)
 
 
 @app.route('/bye_bye')
