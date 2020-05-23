@@ -2,6 +2,7 @@ import telegram
 
 from telebot.credentials import bot_user_name, URL
 from telebot.Act import Act
+from telebot.Generic import Object
 
 from time import sleep
 
@@ -39,67 +40,3 @@ class Chat:
                 print("setting as Chat.follow_up_act - now follow up id is {}".format(self.follow_up_act.id))
 
         print("end GotMessage")
-
-
-class Object(object):
-    def __init__(self):
-        self._attributes = []
-
-    def __setitem__(self, key, value):
-        if key not in self._attributes:
-            self._attributes.append(key)
-        self.__setattr__(key, value)
-
-    def __getitem__(self, item):
-        self.__getattribute__(item)
-
-    def __iter__(self):
-        for item in self._attributes:
-            yield item
-
-    def __str__(self):
-        result = "["
-        for attr in self._attributes:
-            result += "'{key}': '{value}', ".format(key=attr, value=self.__getattribute__(attr))
-        result += "]"
-        return result
-    pass
-
-
-user_specific_acts = [{
-    'triggers': ['whats my name?', 'what is my name?'],
-    'response': "{user.first_name}"
-}, {
-    'triggers': ['what is my full name?', 'whats my full name?'],
-    'response': "{user.first_name} {user.last_name}"
-}, {
-    'triggers': ['what is my family name?', 'whats my family name?'],
-    'response': "{user.last_name}"
-}, {
-    'triggers': ['whats your name?', 'what is your name?', 'what is ur name?', 'whats ur name?'],
-    'response': "my name is {bot_user_name}"
-}, {
-    'triggers': ['i got options', 'options', 'option', 'what?', 'help', '/help'],
-    'response': "options{ReplyMarkup:'hi','hello':'bye bye','whats your name?':"
-                "'whats my full name?','ok':'inline options','/start'}"
-}, {
-    'triggers': ['inline options'],
-    'response': "my options{InlineMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
-},
-]
-
-
-def removeFormatName(text, format_name):
-    remove_from_index = text.find('{' + format_name + ':')
-    return text[:remove_from_index] + text[text.find('}', remove_from_index) + 1:]
-
-
-def getFormatValues(text, format_name):
-    start_index = text.find(':', text.find('{' + format_name + ':'))
-    end_index = text.find('}', start_index)
-    return text[start_index:end_index]
-
-
-# format of this function is "'1','2':'3','4'" to [['1','2']['3','4']]
-def convertStringToSquaredList(text):
-    return [(eval("[" + row + "]")) for row in text.split(":")]

@@ -5,6 +5,7 @@ from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
 from telebot.credentials import bot_user_name, URL
 from telebot.ActDict import *
+from telebot.Generic import GetFormatNames
 
 global Acts
 
@@ -98,7 +99,7 @@ class Act(ABC):
 
 class TextResponse(Act):
     def doAct(self, bot: Bot, chat, message):
-        format_names = getFormatNames(self.data)
+        format_names = GetFormatNames(self.data)
         print('found formant_name ')
         print(format_names)
         print("chat.data")
@@ -184,15 +185,3 @@ class SaveCommand(Command):
 
 def GetTextFromMessage(message):
     return message.text.encode('utf-8').decode()
-
-
-def getFormatNames(text):
-    names = []
-    start_index = text.find('{')
-    end_index = text.find('}', start_index)
-    while start_index != -1 and end_index != -1:
-        names.append(text[start_index + 1:end_index])
-        text = text[:start_index] + text[end_index + 1:]
-        start_index = text.find('{')
-        end_index = text.find('}', start_index)
-    return names

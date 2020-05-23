@@ -127,5 +127,26 @@ ActionsDictionary = [
         'type': ActType.Text,
         'data': '{data.equation_eval}',
     }
+]
 
+need_to_add = [{
+    'triggers': ['whats my name?', 'what is my name?'],
+    'response': "{user.first_name}"
+}, {
+    'triggers': ['what is my full name?', 'whats my full name?'],
+    'response': "{user.first_name} {user.last_name}"
+}, {
+    'triggers': ['what is my family name?', 'whats my family name?'],
+    'response': "{user.last_name}"
+}, {
+    'triggers': ['whats your name?', 'what is your name?', 'what is ur name?', 'whats ur name?'],
+    'response': "my name is {bot_user_name}"
+}, {
+    'triggers': ['i got options', 'options', 'option', 'what?', 'help', '/help'],
+    'response': "options{ReplyMarkup:'hi','hello':'bye bye','whats your name?':"
+                "'whats my full name?','ok':'inline options','/start'}"
+}, {
+    'triggers': ['inline options'],
+    'response': "my options{InlineMarkup:'hi','hello':'bye bye','whats your name?':'whats my full name?'}"
+},
 ]
