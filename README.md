@@ -34,10 +34,24 @@ ActionsDictionary is a list of dictionaries that represent the templates availia
 
 Here are all the classes that use the telegram.Bot to send messages
 
-InitializeActs method creates all the possible actions after reading them from the ActDict variable(ActionsDictionary)
+- InitializeActs() = creates all the possible actions after reading them from the ActDict variable(ActionsDictionary)
 
-To find the correct action to do after getting a message, use getActByTrigger.
+- getActByTrigger(text_message) = To find the correct action to do after getting a message
 
+- doAct(bot,chat,msg) = do the action of this specific Act that was created by ActDict
+	- TextResponse = sends a message back
+	- AnimationResponse = sends an animation back
+	- SaveCommand = saves the 'data' with formating(see ActDict 'data') to 'save_to_data_name' value variable name
+
+# Chat
+Class that holds the information of the chat like previous data changed and user first and last name.
+Also the chat remembers the follow up act it need to do after the getting the next message
+
+- .data = all the data of the conversation saved on this variable, like nickname. from here the formating is taking data
+- .follow_up_act = the follow up action after getting a message, if this exists it will do the action
+- .unhandled_messages = a list of unhandled messages from the user, no trigger for this occasion
+- GotMessage(bot,message) = does the action it suppose to do, if follow up exist it will do it, if not it will search for the appropriate Act by getActByTrigger
+If it does not find it will append to .unhandled_messages
 
 
 
