@@ -1,0 +1,1 @@
+heroku logs -a start-telegram-bot --tail

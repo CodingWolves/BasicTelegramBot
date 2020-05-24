@@ -1,0 +1,1 @@
+heroku restart -a start-telegram-bot
