@@ -3,6 +3,7 @@ from telebot.Chat import Chat
 from telebot.Act import InitializeActs
 from random import randint
 import random
+import datetime
 
 global actions
 actions = []
@@ -15,11 +16,16 @@ def getRandText():
 
 
 def StartTester():
+    seq_total_time = datetime.timedelta()
+    msg_total_time = datetime.timedelta()
+
+
     print(random.random())
     global actions
     InitializeActs()
     chats_count = 1000
-    messages_count = 100
+    messages_count = 10
+    sequences_count = 10
     bot = BotClass()
     first_messages = [MessageClass(message_id=randint(10000, 99999), text=getRandText(),
                                    chat_id=randint(10000, 99999), chat_first_name='ido', chat_last_name='zany')
@@ -31,26 +37,43 @@ def StartTester():
                                  chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
                     for i in range(messages_count)]
 
+        msg_time = datetime.datetime.now()
         for msg in messages:
             actions.clear()
             chat.GotMessage(bot=bot, message=msg)
+            for action in actions:
+                print('action by server - {}'.format(action))
             pass
+        msg_total_time += datetime.datetime.now() - msg_time
 
         for _ in range(6):
             chat.GotMessage(bot=bot, message=MessageClass(message_id=randint(10000, 99999), text='abiding',
                                                           chat_id=chat.id, chat_first_name='ido', chat_last_name='zany'))
-
-        message_sequences = [getMessageSequence(randint(0, 999999)) for _ in range(100)]
+        seq_time = datetime.datetime.now()
+        message_sequences = [getMessageSequence(randint(0, 999999)) for _ in range(sequences_count)]
         for message_sequence in message_sequences:
             actions.clear()
+            print('new message sequence started {}'.format(message_sequence))
             for text in message_sequence['texts']:
                 chat.GotMessage(bot=bot, message=MessageClass(message_id=randint(10000, 99999), text=text,
                                                               chat_id=chat.id, chat_first_name='ido', chat_last_name='zany'))
             for response in message_sequence['responses']:
-                if actions[0]['text'] == response:
-                    actions.pop(0)
+                if len(actions) > 0:
+                    if actions[0]['text'] == response:
+                        print('action by server - {}'.format(actions.pop(0)))
+                    else:
+                        raise Exception("response was not correct '{}' , needed '{}'".format(actions[0], response))
                 else:
-                    raise Exception("response was not correct '{}' , needed '{}'".format(actions[0], response))
+                    raise Exception('fewer actions by server than expected'.format())
+            if len(actions) > 0:
+                print('Unexpected Actions')
+                for action in actions:
+                    print('action by server - {}'.format(action))
+                raise Exception("more responses than expected, ".format(actions[0], response))
+        seq_total_time += datetime.datetime.now() - seq_time
+
+    print('msg time {}'.format(msg_total_time))
+    print('seq time {}'.format(seq_total_time))
 
 
 class BotClass:
