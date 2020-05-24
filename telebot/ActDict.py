@@ -36,7 +36,7 @@ ActionsDictionary = [
     },
     {
         'id': 1001,
-        'triggers': ['bye', 'bye bye', 'byebye', ''],
+        'triggers': ['bye', 'bye bye', 'byebye'],
         'type': ActType.Animation,
         'data': '{URL}bye_bye'
     },
@@ -44,7 +44,7 @@ ActionsDictionary = [
         'id': 2001,
         'triggers': ['whats my name?', 'what is my name?'],
         'type': ActType.Text,
-        'data': 'your name is {user.first_name}'
+        'data': 'your name is {data.user.first_name}'
     },
     {
         'id': 2002,
@@ -54,7 +54,7 @@ ActionsDictionary = [
     },
     {
         'id': 3001,
-        'triggers': ['options2', ''],
+        'triggers': ['options2'],
         'type': ActType.Text,
         'data': 'options static',
         'markup_type': MarkupType.StaticReply,
@@ -118,7 +118,7 @@ ActionsDictionary = [
         'type': ActType.SaveCommand,
         'data': '{data.equation}',
         'save_to_data_name': 'equation_eval',
-        'evaluate': True,
+        # 'evaluate': True,
         'next_act_id': 10103
     },
     {
@@ -130,6 +130,7 @@ ActionsDictionary = [
 ]
 
 need_to_add = [{
+    'triggers': ['whats my name?', 'what is my name?'],
     'triggers': ['whats my name?', 'what is my name?'],
     'response': "{user.first_name}"
 }, {

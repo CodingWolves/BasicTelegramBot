@@ -10,11 +10,10 @@ from time import sleep
 class Chat:
     def __init__(self, message):
         self.id = message.chat.id
-        self.user = {
-            'first_name': message.chat.first_name,
-            'last_name': message.chat.last_name,
-        }
         self.data = Object()
+        self.data.user = Object()
+        self.data.user.first_name = message.chat.first_name
+        self.data.user.last_name = message.chat.last_name
         self.follow_up_act = False
         self.unhandled_messages = []
 

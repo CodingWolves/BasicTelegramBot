@@ -5,7 +5,7 @@ from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
 from telebot.credentials import bot_user_name, URL
 from telebot.ActDict import *
-from telebot.Generic import GetFormatNames
+from telebot.Generic import GetFormatNames, Object
 
 global Acts
 
@@ -105,13 +105,13 @@ class TextResponse(Act):
         print("chat.data")
         print(chat.data)
         for name in format_names:
-            if not name.split('.', 1)[1] in chat.data:
+            if not Object.hasAttrNested(chat, name):
                 print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(
                     format_name=name.split('.', 1)[1], chat_id=chat.id))
-                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat.data'.format(name.split('.', 1)[1]),
+                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat'.format(name),
                                 reply_to_message_id=message.message_id)
                 return
-        text = self.data.format(user=chat.user, data=chat.data, bot_user_name=bot_user_name)
+        text = self.data.format(data=chat.data, bot_user_name=bot_user_name)
         if text == "":
             print("error - act id {} tried sending a null text".format(self.id))
             return
@@ -124,7 +124,7 @@ class TextResponse(Act):
 
 class AnimationResponse(Act):
     def doAct(self, bot: Bot, chat, message):
-        url = self.data.format(URL=URL)
+        url = self.data.format(URL=URL, data=chat.data)
         if url == "":
             print("act id {} tried sending a null url animation".format(self.id))
             return
