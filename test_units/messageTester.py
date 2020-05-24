@@ -48,8 +48,18 @@ def getSequenceFromActDict(act_id: int, server_data=Object(), is_follow_up=False
             server_msg = action_dict['data'].format(text_message=user_msg, data=server_data, URL=URL)
             server_messages.append(server_msg)
         elif action_dict['type'] == ActType.SaveCommand:
-            data_name = action_dict['save_to_data_name']
-            server_data[data_name] = action_dict['data'].format(data=server_data)
+            save_text = action_dict['data'].format(data=server_data)
+            if 'evaluate' in action_dict:
+                try:
+                    eval_result = eval(save_text)  # very risky move , can be hacked in a second
+                    data_name = action_dict['save_to_data_name']
+                    server_data[data_name] = eval_result
+                except:
+                    server_messages.append("eval '{}' cannot be evaluated".format(save_text))
+                    return {'texts': user_messages, 'responses': server_messages}
+            else:
+                data_name = action_dict['save_to_data_name']
+                server_data[data_name] = save_text
         else:
             raise Exception('101')
     else:
@@ -91,5 +101,8 @@ message_sequences = [
      },
     {'texts': ['okay', 'ok', 'OK', 'Ok'],
      'responses': ['OK', 'OK', 'OK', 'OK']
+     },
+    {'texts': ['calc', '1+1'],
+     'responses': ['enter your equation now', '2']
      },
 ]

@@ -118,7 +118,7 @@ ActionsDictionary = [
         'type': ActType.SaveCommand,
         'data': '{data.equation}',
         'save_to_data_name': 'equation_eval',
-        # 'evaluate': True,
+        'evaluate': True,
         'next_act_id': 10103
     },
     {
