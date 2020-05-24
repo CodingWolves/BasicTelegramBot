@@ -8,7 +8,7 @@ class Object(object):
         self.__setattr__(key, value)
 
     def __getitem__(self, item):
-        self.__getattribute__(item)
+        return self.__getattribute__(item)
 
     def __iter__(self):
         for item in self._attributes:
