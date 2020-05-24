@@ -167,7 +167,8 @@ class SaveCommand(Command):
         if self.eval:
             try:
                 data = chat.data
-                eval_result = eval(save_text)  # very risky move , can be hacked in a second
+                eval_result = eval(save_text)  # very risky move , can be hacked in a second , suck as "()"*8**5
+                # [i for i in range(10**100)] crashes the app
                 chat.data[self.data_name] = eval_result
             except:
                 print("eval '{}' cannot be evaluated chat_id={} ".format(save_text, chat.id))
