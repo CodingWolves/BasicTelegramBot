@@ -1,5 +1,6 @@
 import re
 from time import sleep
+import os
 
 from flask import Flask, request, send_file
 
@@ -18,7 +19,7 @@ global chats
 global initializing_server
 global initialized
 global datetime_of_start
-TOKEN = bot_token
+TOKEN = os.environ['BOT_TOKEN']
 bot = telegram.Bot(token=TOKEN)
 chats = []
 initializing_server = False
