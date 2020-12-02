@@ -149,11 +149,9 @@ def findParentheses(equation: str) -> ():
     while p_difference != 0:
         p_end = equation.find(')', p_end + 1)
         if p_end < 0:
-            break
+            return None
         p_difference = equation.count('(', p_start, p_end) - \
                        equation.count(')', p_start, p_end)
-    if p_end < 0:
-        return None
     return p_start, p_end
 
     pass

@@ -1,6 +1,7 @@
 .idea/
 Pipfile.lock
 *test.py
+credentials.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
